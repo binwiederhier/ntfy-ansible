@@ -1,0 +1,48 @@
+---
+
+- name: Install ntfy
+  apt:
+    name: ntfy
+    state: latest
+
+- name: Update /etc/ntfy/server.yml
+  template:
+    src: server.yml.j2
+    dest: /etc/ntfy/server.yml
+    owner: ntfy
+    group: ntfy
+    mode: 0600
+
+- name: Update /etc/ntfy/firebase.json
+  copy:
+    content: "{{ ntfy_firebase_json }}"
+    dest: /etc/ntfy/firebase.json
+    owner: ntfy
+    group: ntfy
+    mode: 0600
+
+- name: Create /etc/systemd/system/ntfy.service.d
+  file:
+    path: /etc/systemd/system/ntfy.service.d
+    state: directory
+    mode: 0755
+
+- name: Update /etc/systemd/system/ntfy.service.d/override.conf
+  copy:
+    src: override.conf
+    dest: /etc/systemd/system/ntfy.service.d/override.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Issue certificate for ntfy.sh
+  command:
+    cmd: certbot certonly --dns-route53 -d ntfy.sh --agree-tos -m philipp.heckel@gmail.com -n
+    creates: /etc/letsencrypt/live/ntfy.sh
+
+- name: Enable and start ntfy
+  systemd:
+    daemon-reload: yes
+    name: ntfy
+    state: started
+    enabled: yes

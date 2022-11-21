@@ -1,0 +1,21 @@
+---
+
+- name: Install fail2ban
+  apt:
+    name: fail2ban
+    state: latest
+
+- name: Install /etc/fail2ban/jail.d/nginx-limit-req.local
+  copy:
+    src: jail.d/nginx-limit-req.local
+    dest: /etc/fail2ban/jail.d/nginx-limit-req.local
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable and start fail2ban
+  systemd:
+    daemon-reload: yes
+    name: fail2ban
+    state: started
+    enabled: yes

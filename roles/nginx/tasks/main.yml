@@ -1,0 +1,55 @@
+---
+
+- name: Install nginx
+  apt:
+    name: nginx
+    state: latest
+
+- name: Install /etc/nginx/nginx.conf
+  copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Install sites to /etc/nginx/sites-available
+  copy:
+    src: sites-available/{{ item }}
+    dest: /etc/nginx/sites-available/{{ item }}
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - ntfy.sh
+    - nopaste.net
+
+- name: Enable sites
+  file:
+    src: /etc/nginx/sites-available/{{ item }}
+    dest: /etc/nginx/sites-enabled/{{ item }}
+    state: link
+  loop:
+    - ntfy.sh
+    - nopaste.net
+
+- name: Create /etc/systemd/system/nginx.service.d
+  file:
+    path: /etc/systemd/system/nginx.service.d
+    state: directory
+    mode: 0755
+
+- name: Update /etc/systemd/system/nginx.service.d/override.conf
+  copy:
+    src: override.conf
+    dest: /etc/systemd/system/nginx.service.d/override.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable and start nginx
+  systemd:
+    daemon-reload: yes
+    name: nginx
+    state: started
+    enabled: yes

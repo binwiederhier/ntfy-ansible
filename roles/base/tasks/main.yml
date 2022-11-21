@@ -1,0 +1,111 @@
+---
+
+# APT repository
+
+- name: Create /etc/apt/keyrings/
+  file:
+    path: /etc/apt/keyrings/
+    state: directory
+    mode: 0755
+
+- name: Install archive.heckel.io repository keyring
+  ansible.builtin.get_url:
+    url: https://archive.heckel.io/apt/keyring.gpg
+    dest: /etc/apt/keyrings/archive.heckel.io.gpg
+
+- name: Add archive.heckel.io repository
+  apt_repository:
+    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/archive.heckel.io.gpg] https://archive.heckel.io/apt debian main"
+    state: present
+    filename: ntfy
+
+
+# Custom config for scripts
+
+- name: Create /etc/custom
+  file:
+    path: /etc/custom
+    state: directory
+    mode: 0755
+
+- name: Install /etc/custom/custom.conf
+  template:
+    src: etc/custom/custom.conf.j2
+    dest: /etc/custom/custom.conf
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Create /root/.aws
+  file:
+    path: /root/.aws
+    state: directory
+    mode: 0755
+
+
+# Certbot & AWS config for certbot-route53 plugin
+
+- name: Install /root/.aws/config
+  copy:
+    content: "{{ aws_config }}"
+    dest: /root/.aws/config
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Install certbot
+  apt:
+    pkg:
+      - certbot
+      - python3-certbot-dns-route53
+    state: latest
+
+- name: Install certbot post hook /etc/letsencrypt/renewal-hooks/post/nginx-reload
+  copy:
+    src: etc/letsencrypt/renewal-hooks/post/nginx-reload
+    dest: /etc/letsencrypt/renewal-hooks/post/nginx-reload
+    owner: root
+    group: root
+    mode: 0744
+
+
+# Custom cronjobs and scripts
+
+- name: Install custom cronjobs /etc/cron.d/custom
+  copy:
+    src: etc/cron.d/custom
+    dest: /etc/cron.d/custom
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Installing scripts in /usr/local/bin
+  copy:
+    src: usr/local/bin/{{ item }}
+    dest: /usr/local/bin/{{ item }}
+    owner: root
+    group: root
+    mode: 0700
+  loop:
+    - checkdiskspace
+    - ntfy-cachedb-backup
+    - ntfy-health-check
+    - ntfy-ssh-login
+    - ntfy-stats
+
+- name: Install /usr/local/bin/ntfy-cachedb-backup
+  copy:
+    src: usr/local/bin/ntfy-cachedb-backup
+    dest: /usr/local/bin/ntfy-cachedb-backup
+    owner: root
+    group: root
+    mode: 0700
+
+
+# SSH login alert
+
+- name: Enable alerts on SSH login
+  lineinfile:
+    path: /etc/pam.d/sshd
+    regexp: 'ntfy-ssh-login'
+    line: session optional pam_exec.so /usr/local/bin/ntfy-ssh-login

@@ -1,0 +1,74 @@
+#!/bin/bash
+
+. /etc/custom/custom.conf
+
+file=/var/log/nginx/access.log
+ips=$(cat $file | grep "poll=1" | awk '{print $1}' | sort | uniq | wc -l)
+clients=$(cat $file | grep "poll=1" | awk '{ print $1, $12, $13 }'| sort| uniq|wc -l)
+clients_play=$(cat $file | grep "poll=1" | awk '{ print $1, $12, $13 }'| sort| uniq|grep play|wc -l)
+clients_fdroid=$(cat $file | grep "poll=1" | awk '{ print $1, $12, $13 }'| sort| uniq|grep fdroid|wc -l)
+clients_curl=$(cat $file | grep "poll=1" | awk '{ print $1, $12, $13 }'| sort| uniq|grep curl|wc -l)
+clients_ios=$(cat $file | grep "poll=1" | awk '{ print $1, $12, $13 }'| sort| uniq|grep build|wc -l)
+clients_other=$(cat $file | grep "poll=1" | awk '{ print $1, $12, $13 }'| sort| uniq|grep -vE 'curl|fdroid|play|build'|wc -l)
+#messages=$(cat $file | grep -E 'PUT|POST'|wc -l)
+messages_success=$(cat $file | awk '$6 ~ "POST|PUT" && $9 == 200' | wc -l)
+messages_failed_ratelimited=$(cat $file | awk '$6 ~ "POST|PUT" && $9 == 429' | wc -l)
+messages_failed_other=$(cat $file | awk '$6 ~ "POST|PUT" && $9 != 200 && $9 != 429' | wc -l)
+
+top_publishers=$(\
+cat $file | \
+awk '
+  {
+    if ($6 ~ "POST|PUT" && $9 == 200) {
+      counts[$1] += 1
+    }
+  }
+  END {
+    counts["matrix.org"] = counts["176.126.240.158"] + counts["176.126.240.157"]
+    counts["up.schildi.chat"] = counts["116.203.112.46"]
+    counts["matrix.gateway.unifiedpush.org"] = counts["132.226.42.65"]
+    counts["mastodon.social"] = counts["136.243.88.169"]
+    counts["matrix.envs.net"] = counts["144.76.146.18"]
+
+    counts["176.126.240.158"] = 0
+    counts["176.126.240.157"] = 0
+    counts["116.203.112.46"] = 0
+    counts["132.226.42.65"] = 0
+    counts["136.243.88.169"] = 0
+    counts["144.76.146.18"] = 0
+
+    for (ip in counts) {
+      if (ip ~ /^[0-9]+\.[0-9]+/) {
+        split(ip,p,".")
+        label=p[1]"."p[2]".x.x"
+      } else {
+        label = ip"*"
+      }
+      print counts[ip], label
+    }
+  }' | \
+sort -nr | \
+head -n 10\
+)
+
+msg="IPs: $ips
+Clients: $clients
+- Google Play: $clients_play
+- F-Droid: $clients_fdroid
+- iOS: $clients_ios
+- curl: $clients_curl
+- other: $clients_other
+Messages:
+- Successful: $messages_success
+- Failed (rate limited): $messages_failed_ratelimited
+- Failed (other): $messages_failed_other
+
+Top publishers (* = limit exemption):
+$top_publishers
+"
+
+echo "$msg"
+curl \
+  -d "$msg" \
+  -u "statswriter:${ntfy_stats_writer_pass}" \
+  https://ntfy.sh/stats

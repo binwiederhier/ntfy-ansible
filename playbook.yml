@@ -1,0 +1,8 @@
+---
+- hosts: all
+  roles:
+    - base
+    - ntfy
+    - pcopy
+    - fail2ban
+    - nginx

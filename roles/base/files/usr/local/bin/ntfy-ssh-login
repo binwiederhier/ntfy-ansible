@@ -1,0 +1,12 @@
+#!/bin/bash
+
+. /etc/custom/custom.conf
+
+if [ "${PAM_TYPE}" = "open_session" ]; then
+        curl \
+          -H "Tags: warning" \
+          -H "Priority: high" \
+          -d "SSH login to $(hostname): ${PAM_USER} from ${PAM_RHOST}" \
+          "${ntfy_topic_url}"
+fi
+
