@@ -6,17 +6,17 @@
     state: latest
 
 - name: Update /etc/pcopy/server.conf
-  copy:
-    src: server.conf
+  template:
+    src: server.conf.j2
     dest: /etc/pcopy/server.conf
     owner: root
     group: root
     mode: 0644
 
-- name: Issue certificate for nopaste.net
+- name: Issue certificate for {{ nopaste_domain }}
   command:
-    cmd: certbot certonly --dns-route53 -d nopaste.net --agree-tos -m philipp.heckel@gmail.com -n
-    creates: /etc/letsencrypt/live/nopaste.net
+    cmd: certbot certonly --dns-route53 -d {{ nopaste_domain }} --agree-tos -m philipp.heckel@gmail.com -n
+    creates: /etc/letsencrypt/live/{{ nopaste_domain }}
 
 - name: Enable and start pcopy
   systemd:

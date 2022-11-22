@@ -2,7 +2,9 @@
 
 - name: Install ntfy
   apt:
-    name: ntfy
+    pkg:
+      - ntfy
+      - sqlite3
     state: latest
 
 - name: Update /etc/ntfy/server.yml
@@ -35,10 +37,10 @@
     group: root
     mode: 0644
 
-- name: Issue certificate for ntfy.sh
+- name: Issue certificate for {{ ntfy_domain }}
   command:
-    cmd: certbot certonly --dns-route53 -d ntfy.sh --agree-tos -m philipp.heckel@gmail.com -n
-    creates: /etc/letsencrypt/live/ntfy.sh
+    cmd: certbot certonly --dns-route53 -d {{ ntfy_domain }} --agree-tos -m philipp.heckel@gmail.com -n
+    creates: /etc/letsencrypt/live/{{ ntfy_domain }}
 
 - name: Enable and start ntfy
   systemd:

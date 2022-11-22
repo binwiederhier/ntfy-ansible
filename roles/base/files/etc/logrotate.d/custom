@@ -1,0 +1,6 @@
+/var/log/ntfy-health-check.log {
+    rotate 12
+    weekly
+    compress
+    missingok
+}

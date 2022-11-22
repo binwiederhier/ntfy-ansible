@@ -1,6 +1,7 @@
-# m h  dom mon dow   command
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-*/2   * * * * /usr/local/bin/ntfy-health-check >> /var/log/ntfy-health-check.log
-58   23 * * * /usr/local/bin/ntfy-stats > /dev/null
-*/30  * * * * /usr/local/bin/ntfy-cachedb-backup > /dev/null 2>&1
-*/4   * * * * /usr/local/bin/checkdiskspace
+# m  h  dom mon dow user command
+*/2  *  *   *   *   root /usr/local/bin/ntfy-health-check >> /var/log/ntfy-health-check.log
+58   23 *   *   *   root /usr/local/bin/ntfy-stats > /dev/null
+*/30 *  *   *   *   root /usr/local/bin/ntfy-cachedb-backup > /dev/null 2>&1
+*/4  *  *   *   *   root /usr/local/bin/checkdiskspace

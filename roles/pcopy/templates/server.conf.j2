@@ -8,7 +8,7 @@
 # Format:    HOST[:PORT]
 # Default:   None
 #
-ServerAddr https://nopaste.net
+ServerAddr https://{{ nopaste_domain }}
 
 # Address and port to use to bind the server. To bind to all addresses, you may omit the address,
 # e.g. :2586.
@@ -70,7 +70,7 @@ DefaultID
 # Format:  <string>
 # Default: pcopy
 #
-ClipboardName nopaste.net
+ClipboardName {{ nopaste_domain }}
 
 # Path to the directory in which the clipboard resides. If not set, this defaults to
 # the path /var/cache/pcopy.

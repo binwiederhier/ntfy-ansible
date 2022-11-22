@@ -3,7 +3,7 @@
 # Public facing base URL of the service (e.g. https://ntfy.sh or https://ntfy.example.com)
 # This setting is currently only used by the e-mail sending feature (outgoing mail only).
 #
-base-url: "https://ntfy.sh"
+base-url: "https://{{ ntfy_domain }}"
 
 # Listen address for the HTTP & HTTPS web server. If "listen-https" is set, you must also
 # set "key-file" and "cert-file". Format: <hostname>:<port>
@@ -89,7 +89,7 @@ attachment-cache-dir: "/var/cache/ntfy/attachments"
 # - smtp-sender-from is the e-mail address of the sender
 #
 smtp-sender-addr: "email-smtp.us-east-2.amazonaws.com:587"
-smtp-sender-from: "ntfy@ntfy.sh"
+smtp-sender-from: "ntfy@{{ ntfy_domain }}"
 smtp-sender-user: "AKIA2BUTIFUHSYRULUOT"
 smtp-sender-pass: "{{ ntfy_smtp_sender_pass }}"
 
@@ -103,7 +103,7 @@ smtp-sender-pass: "{{ ntfy_smtp_sender_pass }}"
 #   $topic@ntfy.sh will be accepted (which may obviously be a spam problem).
 #
 smtp-server-listen: ":25"
-smtp-server-domain: "ntfy.sh"
+smtp-server-domain: "{{ ntfy_domain }}"
 smtp-server-addr-prefix: "ntfy-"
 
 # Interval in which keepalive messages are sent to the client. This is to prevent

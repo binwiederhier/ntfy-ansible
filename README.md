@@ -4,14 +4,14 @@ Playbook to deploy the [ntfy.sh](https://ntfy.sh) and [nopaste.net](https://nopa
 ## Run playbook
 ```
 ansible-playbook \
-    -i inventory/localhost.yml \
-    -e @secrets.yml \
+    -i inventory/dev.yml \
+    -e @secrets/dev.yml \
     --ask-vault-pass \
     playbook.yml
 ```
 
 ## Encrypt/decrypt secrets
 ```
-ansible-vault encrypt secrets.yml
-ansible-vault decrypt secrets.yml
+ansible-vault encrypt secrets/staging.yml
+ansible-vault decrypt secrets/staging.yml
 ```

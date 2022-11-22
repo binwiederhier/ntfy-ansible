@@ -1,6 +1,6 @@
 server {
   listen 80;
-  server_name ntfy.sh;
+  server_name {{ ntfy_domain }};
 
   location / {
     # Redirect to HTTPS
@@ -47,7 +47,7 @@ server {
 
 server {
   listen 443 ssl;
-  server_name ntfy.sh;
+  server_name {{ ntfy_domain }};
 
   # SSL/TLS
   ssl_session_cache builtin:1000 shared:SSL:10m;
@@ -55,8 +55,8 @@ server {
   ssl_ciphers HIGH:!aNULL:!eNULL:!EXPORT:!CAMELLIA:!DES:!MD5:!PSK:!RC4;
   ssl_prefer_server_ciphers on;
 
-  ssl_certificate /etc/letsencrypt/live/ntfy.sh/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/ntfy.sh/privkey.pem;
+  ssl_certificate /etc/letsencrypt/live/{{ ntfy_domain }}/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/{{ ntfy_domain }}/privkey.pem;
 
   location / {
     # Rate limit (fail2ban)

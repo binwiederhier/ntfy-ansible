@@ -14,15 +14,15 @@
     mode: 0644
 
 - name: Install sites to /etc/nginx/sites-available
-  copy:
-    src: sites-available/{{ item }}
+  template:
+    src: sites-available/{{ item }}.j2
     dest: /etc/nginx/sites-available/{{ item }}
     owner: root
     group: root
     mode: 0644
   loop:
-    - ntfy.sh
-    - nopaste.net
+    - ntfy
+    - nopaste
 
 - name: Enable sites
   file:
@@ -30,8 +30,8 @@
     dest: /etc/nginx/sites-enabled/{{ item }}
     state: link
   loop:
-    - ntfy.sh
-    - nopaste.net
+    - ntfy
+    - nopaste
 
 - name: Create /etc/systemd/system/nginx.service.d
   file:

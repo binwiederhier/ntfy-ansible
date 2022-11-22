@@ -1,6 +1,6 @@
 server {
   listen 80;
-  server_name nopaste.net;
+  server_name {{ nopaste_domain }};
 
   location / {
     proxy_pass http://127.0.0.1:15080;
@@ -22,15 +22,15 @@ server {
 
 server {
   listen 443 ssl;
-  server_name nopaste.net;
+  server_name {{ nopaste_domain }};
 
   ssl_session_cache builtin:1000 shared:SSL:10m;
   ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
   ssl_ciphers HIGH:!aNULL:!eNULL:!EXPORT:!CAMELLIA:!DES:!MD5:!PSK:!RC4;
   ssl_prefer_server_ciphers on;
 
-  ssl_certificate /etc/letsencrypt/live/nopaste.net/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/nopaste.net/privkey.pem;
+  ssl_certificate /etc/letsencrypt/live/{{ nopaste_domain }}/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/{{ nopaste_domain }}/privkey.pem;
 
   location / {
     proxy_pass http://127.0.0.1:15080;
