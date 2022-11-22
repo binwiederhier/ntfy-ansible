@@ -60,6 +60,12 @@
       - python3-certbot-dns-route53
     state: latest
 
+- name: Create /etc/letsencrypt/renewal-hooks/post
+  file:
+    path: /etc/letsencrypt/renewal-hooks/post
+    state: directory
+    mode: 0755
+
 - name: Install certbot post hook /etc/letsencrypt/renewal-hooks/post/nginx-reload
   copy:
     src: etc/letsencrypt/renewal-hooks/post/nginx-reload
@@ -70,14 +76,6 @@
 
 
 # Custom cronjobs and scripts
-
-- name: Install custom cronjobs /etc/cron.d/custom
-  copy:
-    src: etc/cron.d/custom
-    dest: /etc/cron.d/custom
-    owner: root
-    group: root
-    mode: 0644
 
 - name: Installing scripts in /usr/local/bin
   copy:
@@ -93,13 +91,21 @@
     - ntfy-ssh-login
     - ntfy-stats
 
-- name: Install /usr/local/bin/ntfy-cachedb-backup
+- name: Install custom cronjobs /etc/cron.d/custom
   copy:
-    src: usr/local/bin/ntfy-cachedb-backup
-    dest: /usr/local/bin/ntfy-cachedb-backup
+    src: etc/cron.d/custom
+    dest: /etc/cron.d/custom
     owner: root
     group: root
-    mode: 0700
+    mode: 0644
+
+- name: Install custom logrotate config /etc/logrotate.d/custom
+  copy:
+    src: etc/logrotate.d/custom
+    dest: /etc/logrotate.d/custom
+    owner: root
+    group: root
+    mode: 0644
 
 
 # SSH login alert
