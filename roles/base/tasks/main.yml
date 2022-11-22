@@ -74,6 +74,15 @@
     group: root
     mode: 0744
 
+# Custom scaling configs
+
+- name: Install sysctl config /etc/sysctl.d/88-custom.conf
+  copy:
+    src: etc/sysctl.d/88-custom.conf
+    dest: /etc/sysctl.d/88-custom.conf
+    owner: root
+    group: root
+    mode: 0644
 
 # Custom cronjobs and scripts
 
