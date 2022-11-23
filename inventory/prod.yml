@@ -1,7 +1,7 @@
 all:
   hosts:
     ntfy:
-      ansible_host: x.x.x.x
+      ansible_host: 159.203.148.75
   vars:
     ntfy_domain: "ntfy.sh"
     nopaste_domain: "nopaste.net"
