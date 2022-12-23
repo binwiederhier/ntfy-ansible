@@ -13,6 +13,14 @@
     group: root
     mode: 0644
 
+- name: Install /etc/nginx/dhparam
+  copy:
+    src: dhparam
+    dest: /etc/nginx/dhparam
+    owner: root
+    group: root
+    mode: 0644
+
 - name: Install sites to /etc/nginx/sites-available
   template:
     src: sites-available/{{ item }}.j2
@@ -33,6 +41,11 @@
     - ntfy
     - nopaste
 
+- name: Disabling default site
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
 - name: Create /etc/systemd/system/nginx.service.d
   file:
     path: /etc/systemd/system/nginx.service.d
@@ -46,6 +59,12 @@
     owner: root
     group: root
     mode: 0644
+
+- name: Add www-data user to group ntfy
+  user:
+    name: www-data
+    groups: ntfy
+    append: yes
 
 - name: Enable and start nginx
   systemd:

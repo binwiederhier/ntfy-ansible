@@ -6,10 +6,19 @@
 base-url: "https://{{ ntfy_domain }}"
 
 # Listen address for the HTTP & HTTPS web server. If "listen-https" is set, you must also
-# set "key-file" and "cert-file". Format: <hostname>:<port>
+# set "key-file" and "cert-file". Format: [<ip>]:<port>, e.g. "1.2.3.4:8080".
+#
+# To listen on all interfaces, you may omit the IP address, e.g. ":443".
+# To disable HTTP, set "listen-http" to "-".
 #
 # listen-https:
-listen-http: "127.0.0.1:11080"
+listen-http: "-"
+
+# Listen on a Unix socket, e.g. /var/lib/ntfy/ntfy.sock
+# This can be useful to avoid port issues on local systems, and to simplify permissions.
+#
+listen-unix: "/tmp/ntfy.sock"
+listen-unix-mode: 0660
 
 # Path to the private key & cert file for the HTTPS web server. Not used if "listen-https" is not set.
 #
@@ -30,8 +39,8 @@ firebase-key-file: "/etc/ntfy/firebase.json"
 #       ntfy user and group by running: chown ntfy.ntfy <filename>.
 #
 cache-file: "/var/cache/ntfy/cache.db"
-# cache-duration: "12h"
-cache-batch-size: 25
+cache-duration: "12h"
+cache-batch-size: 100
 cache-batch-timeout: "1500ms"
 cache-startup-queries: |
   pragma journal_mode = WAL;
@@ -56,7 +65,7 @@ cache-startup-queries: |
 #   ntfy user and group by running: chown ntfy.ntfy <filename>.
 #
 auth-file: "/var/lib/ntfy/user.db"
-# auth-default-access: "read-write"
+auth-default-access: "read-write"
 
 # If set, the X-Forwarded-For header is used to determine the visitor IP address
 # instead of the remote address of the connection.

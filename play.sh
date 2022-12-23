@@ -8,6 +8,6 @@ fi
 export env="$1"
 ansible-playbook \
     -i "inventory/$env.yml" \
-    -e "@secrets/prod.yml" \
+    -e "@secrets/$env.yml" \
     --ask-vault-pass \
     playbook.yml
