@@ -2,6 +2,8 @@
 
 . /etc/custom/custom.conf
 
+systemctl reload nginx
+
 curl \
   -d "Renewed certificate(s) on ntfy.sh + nopaste.net host, and nginx reloaded" \
   -H "Tags: information_source,tada" \
