@@ -132,6 +132,17 @@ keepalive-interval: "45s"
 #
 web-root: home
 
+# Various feature flags used to control the web app, and API access, mainly around user and
+# account management.
+#
+# - enable-signup allows users to sign up via the web app, or API
+# - enable-login allows users to log in via the web app, or API
+# - enable-reservations allows users to reserve topics (if their tier allows it)
+#
+enable-signup: true
+enable-login: true
+enable-reservations: true
+
 # Rate limiting: Total number of topics before the server rejects new topics.
 #
 # global-topic-limit: 15000
@@ -170,6 +181,16 @@ visitor-request-limit-exempt-hosts: "up.schildi.chat,matrix.gateway.unifiedpush.
 #
 # visitor-attachment-total-size-limit: "100M"
 # visitor-attachment-daily-bandwidth-limit: "500M"
+
+# Payments integration via Stripe
+#
+# - stripe-secret-key is the key used for the Stripe API communication. Setting this values
+#   enables payments in the ntfy web app (e.g. Upgrade dialog). See https://dashboard.stripe.com/apikeys.
+# - stripe-webhook-key is the key required to validate the authenticity of incoming webhooks from Stripe.
+#   Webhooks are essential up keep the local database in sync with the payment provider. See https://dashboard.stripe.com/webhooks.
+#
+stripe-secret-key: "{{ ntfy_stripe_secret_key }}"
+stripe-webhook-key: "{{ ntfy_stripe_webhook_key }}"
 
 # Log level, can be TRACE, DEBUG, INFO, WARN or ERROR
 # This option can be hot-reloaded by calling "kill -HUP $pid" or "systemctl reload ntfy".
