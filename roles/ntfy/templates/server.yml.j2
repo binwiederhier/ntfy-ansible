@@ -176,6 +176,12 @@ enable-reservations: true
 # - matrix.envs.net (144.76.146.18, run by ~creme)
 visitor-request-limit-exempt-hosts: "up.schildi.chat,matrix.gateway.unifiedpush.org,136.243.88.169,176.126.240.0/24,matrix.envs.net"
 
+# Rate limiting: Hard daily limit of messages per visitor and day. The limit is reset
+# every day at midnight UTC. If the limit is not set (or set to zero), the request
+# limit (see above) governs the upper limit.
+#
+# visitor-message-daily-limit: 0
+
 # Rate limiting: Allowed emails per visitor:
 # - visitor-email-limit-burst is the initial bucket of emails each visitor has
 # - visitor-email-limit-replenish is the rate at which the bucket is refilled
