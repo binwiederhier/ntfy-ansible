@@ -165,6 +165,24 @@ keepalive-interval: "45s"
 #
 # manager-interval: "1m"
 
+# Defines topic names that are not allowed, because they are otherwise used. There are a few default topics
+# that cannot be used (e.g. app, account, settings, ...). To extend the default list, define them here.
+#
+# Example:
+#   disallowed-topics:
+#     - about
+#     - pricing
+#     - contact
+#
+disallowed-topics:
+  - about
+  - pricing
+  - privacy
+  - faq
+  - blog
+  - contact
+  - admin
+
 # Defines if the root route (/) is pointing to the landing page (as on ntfy.sh) or the
 # web app. If you self-host, you don't want to change this. Can be "app" (default) or "home".
 #
