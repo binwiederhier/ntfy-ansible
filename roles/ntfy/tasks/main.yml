@@ -31,8 +31,16 @@
 
 - name: Update /etc/systemd/system/ntfy.service.d/override.conf
   copy:
-    src: override.conf
+    src: etc/systemd/system/ntfy.service.d/override.conf
     dest: /etc/systemd/system/ntfy.service.d/override.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Install ntfy logrotate config /etc/logrotate.d/ntfy
+  copy:
+    src: etc/logrotate.d/ntfy
+    dest: /etc/logrotate.d/ntfy
     owner: root
     group: root
     mode: 0644

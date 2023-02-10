@@ -1,0 +1,6 @@
+/var/log/ntfy.log {
+    rotate 52
+    weekly
+    compress
+    missingok
+}
