@@ -195,9 +195,9 @@ web-root: home
 # - enable-login allows users to log in via the web app, or API
 # - enable-reservations allows users to reserve topics (if their tier allows it)
 #
-enable-signup: true
-enable-login: true
-enable-reservations: true
+# enable-signup: true
+# enable-login: true
+# enable-reservations: true
 
 # Server URL of a Firebase/APNS-connected ntfy server (likely "https://ntfy.sh").
 #
@@ -265,8 +265,8 @@ visitor-request-limit-exempt-hosts: "up.schildi.chat,matrix.gateway.unifiedpush.
 # - stripe-webhook-key is the key required to validate the authenticity of incoming webhooks from Stripe.
 #   Webhooks are essential up keep the local database in sync with the payment provider. See https://dashboard.stripe.com/webhooks.
 #
-stripe-secret-key: "{{ ntfy_stripe_secret_key }}"
-stripe-webhook-key: "{{ ntfy_stripe_webhook_key }}"
+# stripe-secret-key: "{{ ntfy_stripe_secret_key }}"
+# stripe-webhook-key: "{{ ntfy_stripe_webhook_key }}"
 
 # Logging options
 #
