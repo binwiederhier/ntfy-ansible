@@ -45,6 +45,16 @@
     group: root
     mode: 0644
 
+
+- name: Ensure log file exists /var/log/ntfy.log
+  copy:
+    content: ""
+    dest: /var/log/ntfy.log
+    force: false # !
+    group: ntfy
+    owner: ntfy
+    mode: 0600
+
 - name: Issue certificate for {{ ntfy_domain }}
   command:
     cmd: certbot certonly --dns-route53 -d {{ ntfy_domain }} --agree-tos -m philipp.heckel@gmail.com -n
