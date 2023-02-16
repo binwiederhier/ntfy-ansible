@@ -18,12 +18,12 @@ sleep 10
 echo "Running ntfy-setup ..."
 
 # User "phil"
-NTFY_PASSWORD="${ntfy_phil_pass}" ntfy user add phil || true
+NTFY_PASSWORD="${ntfy_phil_pass}" ntfy user add --ignore-exists phil
 ntfy access phil announcements read-write
 ntfy access everyone announcements read-only
 
 # User "statswriter"
-NTFY_PASSWORD="${ntfy_statswriter_pass}" ntfy user add statswriter || true
+NTFY_PASSWORD="${ntfy_statswriter_pass}" ntfy user add --ignore-exists statswriter
 ntfy access statswriter stats read-write
 ntfy access everyone stats read-only
 
@@ -45,7 +45,8 @@ for topic in "${topics_cannot_reserve[@]}"; do
 done
 
 # Create tiers
-(ntfy tier list 2>&1 | grep -q "tier supporter") || ntfy tier add \
+ntfy tier add \
+  --ignore-exists \
   --name=Supporter \
   --message-limit=2500 \
   --message-expiry-duration=120h \
@@ -58,7 +59,8 @@ done
   --stripe-price-id=${ntfy_stripe_price_supporter} \
   supporter
 
-(ntfy tier list 2>&1 | grep -q "tier pro") || ntfy tier add \
+ntfy tier add \
+  --ignore-exists \
   --name=Pro \
   --message-limit=20000 \
   --message-expiry-duration=720h \
@@ -71,7 +73,8 @@ done
   --stripe-price-id=${ntfy_stripe_price_pro} \
   pro
 
-(ntfy tier list 2>&1 | grep -q "tier business") || ntfy tier add \
+ntfy tier add \
+  --ignore-exists \
   --name=Business \
   --message-limit=50000 \
   --message-expiry-duration=1440h \
