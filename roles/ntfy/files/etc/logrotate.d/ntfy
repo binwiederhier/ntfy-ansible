@@ -2,5 +2,6 @@
     rotate 52
     weekly
     compress
+    copytruncate
     missingok
 }

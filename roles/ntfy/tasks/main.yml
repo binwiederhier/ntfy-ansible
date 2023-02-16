@@ -5,6 +5,7 @@
     pkg:
       - ntfy
       - sqlite3
+      - jq
     state: latest
 
 - name: Update /etc/ntfy/server.yml
@@ -45,7 +46,6 @@
     group: root
     mode: 0644
 
-
 - name: Ensure log file exists /var/log/ntfy.log
   copy:
     content: ""
@@ -57,8 +57,13 @@
 
 - name: Issue certificate for {{ ntfy_domain }}
   command:
-    cmd: certbot certonly --dns-route53 -d {{ ntfy_domain }} --agree-tos -m philipp.heckel@gmail.com -n
+    cmd: certbot certonly --dns-route53 -d {{ ntfy_domain }} --agree-tos -m ntfy@heckel.io -n
     creates: /etc/letsencrypt/live/{{ ntfy_domain }}
+
+- name: Run setup
+  command:
+    cmd: ntfy-setup
+    creates: /var/cache/ntfy/setup-done
 
 - name: Enable and start ntfy
   systemd:

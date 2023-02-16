@@ -1,0 +1,82 @@
+#!/bin/bash
+
+. /etc/custom/custom.conf
+
+set -e
+
+# Only run this script once
+# If changed, change ntfy task (main.yml)
+donefile=/var/cache/ntfy/setup-done
+if [ -f "$donefile" ]; then
+  echo "ntfy-setup already done. To run again, remove $donefile."
+  exit 0
+fi
+
+# User "statswriter"
+NTFY_PASSWORD="${ntfy_statswriter_pass}" ntfy user add statswriter
+ntfy access statswriter stats read-write
+ntfy access everyone stats read-only
+
+# Ensure certain topics cannot be reserved. These are all the topics from the docs.
+# Note that this is distinct from "disallowed topics" (see server.yml)
+topics_cannot_reserve=(
+    alerts
+    backups
+    controversial
+    mytopic
+    my_watchtower_topic
+    results
+    secrets
+    test
+    my-alerts
+)
+for topic in "${topics_cannot_reserve[@]}"; do
+  ntfy access everyone "$topic" read-write
+done
+
+# Create tiers
+ntfy tier add \
+  --name=Supporter \
+  --message-limit=2500 \
+  --message-expiry-duration=120h \
+  --email-limit=25 \
+  --reservation-limit=3 \
+  --attachment-file-size-limit=25M \
+  --attachment-total-size-limit=200M \
+  --attachment-expiry-duration=24h \
+  --attachment-bandwidth-limit=1G \
+  --stripe-price-id=${ntfy_stripe_price_supporter} \
+  supporter
+
+ntfy tier add \
+  --name=Pro \
+  --message-limit=20000 \
+  --message-expiry-duration=720h \
+  --email-limit=100 \
+  --reservation-limit=10 \
+  --attachment-file-size-limit=100M \
+  --attachment-total-size-limit=1G \
+  --attachment-expiry-duration=72h \
+  --attachment-bandwidth-limit=5G \
+  --stripe-price-id=${ntfy_stripe_price_pro} \
+  pro
+
+ntfy tier add \
+  --name=Business \
+  --message-limit=50000 \
+  --message-expiry-duration=1440h \
+  --email-limit=500 \
+  --reservation-limit=50 \
+  --attachment-file-size-limit=200M \
+  --attachment-total-size-limit=5G \
+  --attachment-expiry-duration=168h \
+  --attachment-bandwidth-limit=20G \
+  --stripe-price-id=${ntfy_stripe_price_business} \
+  business
+
+# Chown it (since we run these commands as root)
+chown ntfy:ntfy /var/lib/ntfy/user.db*
+chown ntfy:ntfy /var/cache/ntfy/cache.db*
+
+# Prevent setup from running again
+touch "$donefile"

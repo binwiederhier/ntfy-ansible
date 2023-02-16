@@ -70,5 +70,5 @@ $top_publishers
 echo "$msg"
 curl \
   -d "$msg" \
-  -u "statswriter:${ntfy_stats_writer_pass}" \
+  -u "statswriter:${ntfy_statswriter_pass}" \
   https://ntfy.sh/stats

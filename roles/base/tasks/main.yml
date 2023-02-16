@@ -95,10 +95,11 @@
     mode: 0700
   loop:
     - checkdiskspace
-    - ntfy-cachedb-backup
+    - ntfy-database-backup
     - ntfy-health-check
     - ntfy-ssh-login
     - ntfy-stats
+    - ntfy-setup
 
 - name: Install custom cronjobs /etc/cron.d/custom
   copy:

@@ -1,2 +1,4 @@
 #!/bin/bash
+
 sqlite3 /var/cache/ntfy/cache.db ".backup /var/cache/ntfy/cache.db-backup"
+sqlite3 /var/lib/ntfy/user.db ".backup /var/lib/ntfy/user.db-backup"
