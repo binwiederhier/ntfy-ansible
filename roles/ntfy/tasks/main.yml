@@ -60,14 +60,14 @@
     cmd: certbot certonly --dns-route53 -d {{ ntfy_domain }} --agree-tos -m ntfy@heckel.io -n
     creates: /etc/letsencrypt/live/{{ ntfy_domain }}
 
-- name: Run setup
-  command:
-    cmd: ntfy-setup
-    creates: /var/cache/ntfy/setup-done
-
 - name: Enable and start ntfy
   systemd:
     daemon-reload: yes
     name: ntfy
     state: started
     enabled: yes
+
+- name: Run setup
+  command:
+    cmd: ntfy-setup
+    creates: /var/cache/ntfy/setup-done
