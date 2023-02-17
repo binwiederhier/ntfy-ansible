@@ -60,6 +60,19 @@
     group: root
     mode: 0644
 
+- name: Ensure log files exist in /var/log/nginx
+  copy:
+    content: ""
+    dest: /var/log/nginx/{{ item }}
+    force: false # !
+    owner: www-data
+    group: adm
+    mode: 0640
+  loop:
+    - access.log
+    - access_error.log
+    - error.log
+
 - name: Add www-data user to group ntfy
   user:
     name: www-data

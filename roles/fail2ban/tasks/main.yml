@@ -5,13 +5,28 @@
     name: fail2ban
     state: latest
 
-- name: Install /etc/fail2ban/jail.d/nginx-limit-req.local
+- name: Installing fail2ban filters
   copy:
-    src: jail.d/nginx-limit-req.local
-    dest: /etc/fail2ban/jail.d/nginx-limit-req.local
+    src: filter.d/{{ item }}
+    dest: /etc/fail2ban/filter.d/{{ item }}
     owner: root
     group: root
     mode: 0644
+  loop:
+    - nginx-400.conf
+    - nginx-429.conf
+
+- name: Installing fail2ban jails
+  copy:
+    src: jail.d/{{ item }}
+    dest: /etc/fail2ban/jail.d/{{ item }}
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - nginx-limit-req.local
+    - nginx-400.local
+    - nginx-429.local
 
 - name: Enable and start fail2ban
   systemd:

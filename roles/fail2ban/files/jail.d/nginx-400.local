@@ -1,0 +1,8 @@
+[nginx-400]
+enabled = true
+filter = nginx-400
+action = iptables-multiport[name=nginx-400, port="http,https", protocol=tcp]
+logpath = /var/log/nginx/access_error.log
+findtime = 10m
+bantime = 1h
+maxretry = 125

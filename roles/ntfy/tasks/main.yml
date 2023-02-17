@@ -52,8 +52,8 @@
     content: ""
     dest: /var/log/ntfy.log
     force: false # !
-    group: ntfy
     owner: ntfy
+    group: ntfy
     mode: 0600
 
 - name: Issue certificate for {{ ntfy_domain }}
