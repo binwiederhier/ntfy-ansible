@@ -4,4 +4,5 @@ all:
       ansible_host: dev.ntfy.sh
   vars:
     ntfy_domain: "dev.ntfy.sh"
+    ntfy_stats_topic: "stats-dev"
     nopaste_domain: "dev.nopaste.net"

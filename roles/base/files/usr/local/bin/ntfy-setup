@@ -24,8 +24,8 @@ ntfy access everyone announcements read-only
 
 # User "statswriter"
 NTFY_PASSWORD="${ntfy_statswriter_pass}" ntfy user add --ignore-exists statswriter
-ntfy access statswriter stats read-write
-ntfy access everyone stats read-only
+ntfy access statswriter "${ntfy_stats_topic}" read-write
+ntfy access everyone "${ntfy_stats_topic}" read-only
 
 # Ensure certain topics cannot be reserved. These are all the topics from the docs.
 # Note that this is distinct from "disallowed topics" (see server.yml)

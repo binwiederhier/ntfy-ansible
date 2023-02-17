@@ -2,7 +2,7 @@
 
 . /etc/custom/custom.conf
 
-file=/var/log/nginx/access.log
+file="/var/log/nginx/access.log /var/log/nginx/access_error.log"
 ips=$(cat $file | grep "poll=1" | awk '{print $1}' | sort | uniq | wc -l)
 clients=$(cat $file | grep "poll=1" | awk '{ print $1, $12, $13 }'| sort| uniq|wc -l)
 clients_play=$(cat $file | grep "poll=1" | awk '{ print $1, $12, $13 }'| sort| uniq|grep play|wc -l)
@@ -10,7 +10,6 @@ clients_fdroid=$(cat $file | grep "poll=1" | awk '{ print $1, $12, $13 }'| sort|
 clients_curl=$(cat $file | grep "poll=1" | awk '{ print $1, $12, $13 }'| sort| uniq|grep curl|wc -l)
 clients_ios=$(cat $file | grep "poll=1" | awk '{ print $1, $12, $13 }'| sort| uniq|grep build|wc -l)
 clients_other=$(cat $file | grep "poll=1" | awk '{ print $1, $12, $13 }'| sort| uniq|grep -vE 'curl|fdroid|play|build'|wc -l)
-#messages=$(cat $file | grep -E 'PUT|POST'|wc -l)
 messages_success=$(cat $file | awk '$6 ~ "POST|PUT" && $9 == 200' | wc -l)
 messages_failed_ratelimited=$(cat $file | awk '$6 ~ "POST|PUT" && $9 == 429' | wc -l)
 messages_failed_other=$(cat $file | awk '$6 ~ "POST|PUT" && $9 != 200 && $9 != 429' | wc -l)
@@ -71,4 +70,4 @@ echo "$msg"
 curl \
   -d "$msg" \
   -u "statswriter:${ntfy_statswriter_pass}" \
-  https://ntfy.sh/stats
+  "https://${ntfy_domain}/${ntfy_stats_topic}"
