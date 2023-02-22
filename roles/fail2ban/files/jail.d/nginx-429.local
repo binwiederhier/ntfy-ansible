@@ -3,6 +3,10 @@ enabled = true
 filter = nginx-429
 action = iptables-multiport[name=nginx-429, port="http,https", protocol=tcp]
 logpath = /var/log/nginx/access_error.log
-findtime = 10m
+findtime = 30m
+maxretry = 225
 bantime = 1h
-maxretry = 75
+bantime.increment = true
+bantime.rndtime = 5m
+bantime.maxtime = 4h
+bantime.factor = 1

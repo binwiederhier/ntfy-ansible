@@ -6,7 +6,7 @@
       - ntfy
       - sqlite3
       - jq
-    state: latest
+    state: present # Not: latest, we want to restart manually!
     update_cache: true
 
 - name: Update /etc/ntfy/server.yml

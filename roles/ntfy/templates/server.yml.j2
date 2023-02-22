@@ -242,14 +242,14 @@ visitor-request-limit-exempt-hosts: "up.schildi.chat,matrix.gateway.unifiedpush.
 # every day at midnight UTC. If the limit is not set (or set to zero), the request
 # limit (see above) governs the upper limit.
 #
-# visitor-message-daily-limit: 0
+visitor-message-daily-limit: 10000
 
 # Rate limiting: Allowed emails per visitor:
 # - visitor-email-limit-burst is the initial bucket of emails each visitor has
 # - visitor-email-limit-replenish is the rate at which the bucket is refilled
 #
-# visitor-email-limit-burst: 16
-# visitor-email-limit-replenish: "1h"
+visitor-email-limit-burst: 12
+visitor-email-limit-replenish: "2h"
 
 # Rate limiting: Attachment size and bandwidth limits per visitor:
 # - visitor-attachment-total-size-limit is the total storage limit used for attachments per visitor

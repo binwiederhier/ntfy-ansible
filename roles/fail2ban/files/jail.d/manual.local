@@ -1,0 +1,8 @@
+[manual]
+enabled = true
+filter = manual
+action = iptables-multiport[name=manual, port="http,https", protocol=tcp]
+logpath = /var/log/fail2ban-manual.log
+findtime = 10m
+bantime = 30d
+maxretry = 1

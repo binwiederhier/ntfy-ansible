@@ -15,6 +15,7 @@
   loop:
     - nginx-400.conf
     - nginx-429.conf
+    - manual.conf
 
 - name: Installing fail2ban jails
   copy:
@@ -27,6 +28,16 @@
     - nginx-limit-req.local
     - nginx-400.local
     - nginx-429.local
+    - manual.local
+
+- name: Ensure dummy log file exists /var/log/fail2ban-manual.log
+  copy:
+    content: "dummy log file"
+    dest: /var/log/fail2ban-manual.log
+    force: false # !
+    owner: root
+    group: root
+    mode: 0644
 
 - name: Enable and start fail2ban
   systemd:
