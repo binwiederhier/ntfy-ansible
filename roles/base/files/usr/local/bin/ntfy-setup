@@ -48,43 +48,46 @@ done
 ntfy tier add \
   --ignore-exists \
   --name=Supporter \
+  --reservation-limit=3 \
   --message-limit=2500 \
   --message-expiry-duration=120h \
   --email-limit=25 \
-  --reservation-limit=3 \
   --attachment-file-size-limit=25M \
   --attachment-total-size-limit=200M \
   --attachment-expiry-duration=24h \
   --attachment-bandwidth-limit=1G \
-  --stripe-price-id=${ntfy_stripe_price_supporter} \
+  --stripe-monthly-price-id=${ntfy_stripe_price_supporter_monthly} \
+  --stripe-yearly-price-id=${ntfy_stripe_price_supporter_yearly} \
   supporter
 
 ntfy tier add \
   --ignore-exists \
   --name=Pro \
+  --reservation-limit=10 \
   --message-limit=20000 \
   --message-expiry-duration=720h \
-  --email-limit=100 \
-  --reservation-limit=10 \
-  --attachment-file-size-limit=100M \
+  --email-limit=150 \
+  --attachment-file-size-limit=150M \
   --attachment-total-size-limit=1G \
   --attachment-expiry-duration=72h \
   --attachment-bandwidth-limit=5G \
-  --stripe-price-id=${ntfy_stripe_price_pro} \
+  --stripe-monthly-price-id=${ntfy_stripe_price_pro_monthly} \
+  --stripe-yearly-price-id=${ntfy_stripe_price_pro_yearly} \
   pro
 
 ntfy tier add \
   --ignore-exists \
   --name=Business \
+  --reservation-limit=50 \
   --message-limit=50000 \
   --message-expiry-duration=1440h \
   --email-limit=500 \
-  --reservation-limit=50 \
   --attachment-file-size-limit=200M \
   --attachment-total-size-limit=5G \
   --attachment-expiry-duration=168h \
   --attachment-bandwidth-limit=20G \
-  --stripe-price-id=${ntfy_stripe_price_business} \
+  --stripe-monthly-price-id=${ntfy_stripe_price_business_monthly} \
+  --stripe-yearly-price-id=${ntfy_stripe_price_business_yearly} \
   business
 
 # Chown it (since we run these commands as root)
