@@ -121,9 +121,9 @@ behind-proxy: true
 # - attachment-file-size-limit is the per-file attachment size limit (e.g. 300k, 2M, 100M)
 # - attachment-expiry-duration is the duration after which uploaded attachments will be deleted (e.g. 3h, 20h)
 #
-# attachment-total-size-limit: "5G"
-# attachment-file-size-limit: "15M"
-# attachment-expiry-duration: "3h"
+attachment-expiry-duration: "3h"
+attachment-total-size-limit: "60G"
+attachment-file-size-limit: "10M"
 attachment-cache-dir: "/var/cache/ntfy/attachments"
 
 # If enabled, allow outgoing e-mail notifications via the 'X-Email' header. If this header is set,
@@ -242,7 +242,7 @@ visitor-request-limit-exempt-hosts: "up.schildi.chat,matrix.gateway.unifiedpush.
 # every day at midnight UTC. If the limit is not set (or set to zero), the request
 # limit (see above) governs the upper limit.
 #
-visitor-message-daily-limit: 10000
+visitor-message-daily-limit: 4000
 
 # Rate limiting: Allowed emails per visitor:
 # - visitor-email-limit-burst is the initial bucket of emails each visitor has
@@ -255,8 +255,8 @@ visitor-email-limit-replenish: "2h"
 # - visitor-attachment-total-size-limit is the total storage limit used for attachments per visitor
 # - visitor-attachment-daily-bandwidth-limit is the total daily attachment download/upload traffic limit per visitor
 #
-# visitor-attachment-total-size-limit: "100M"
-# visitor-attachment-daily-bandwidth-limit: "500M"
+visitor-attachment-total-size-limit: "75M"
+visitor-attachment-daily-bandwidth-limit: "200M"
 
 # Payments integration via Stripe
 #

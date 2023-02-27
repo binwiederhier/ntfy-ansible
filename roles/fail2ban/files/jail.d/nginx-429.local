@@ -8,5 +8,5 @@ maxretry = 225
 bantime = 1h
 bantime.increment = true
 bantime.rndtime = 5m
-bantime.maxtime = 4h
+bantime.maxtime = 6h
 bantime.factor = 1
