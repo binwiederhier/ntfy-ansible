@@ -264,9 +264,12 @@ visitor-attachment-daily-bandwidth-limit: "200M"
 #   enables payments in the ntfy web app (e.g. Upgrade dialog). See https://dashboard.stripe.com/apikeys.
 # - stripe-webhook-key is the key required to validate the authenticity of incoming webhooks from Stripe.
 #   Webhooks are essential up keep the local database in sync with the payment provider. See https://dashboard.stripe.com/webhooks.
+# - billing-contact is an email address or website displayed in the "Upgrade tier" dialog to let people reach
+#   out with billing questions. If unset, nothing will be displayed.
 #
 stripe-secret-key: "{{ ntfy_stripe_secret_key }}"
 stripe-webhook-key: "{{ ntfy_stripe_webhook_key }}"
+billing-contact: "{{ ntfy_billing_contact }}"
 
 # Logging options
 #
