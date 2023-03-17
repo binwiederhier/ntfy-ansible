@@ -5,4 +5,5 @@ all:
   vars:
     ntfy_domain: "ntfy.sh"
     ntfy_stats_topic: "stats"
+    ntfy_internal_ip: "10.108.0.2"
     nopaste_domain: "nopaste.net"

@@ -286,6 +286,19 @@ stripe-secret-key: "{{ ntfy_stripe_secret_key }}"
 stripe-webhook-key: "{{ ntfy_stripe_webhook_key }}"
 billing-contact: "{{ ntfy_billing_contact }}"
 
+# Metrics
+#
+# ntfy can expose Prometheus-style metrics via a /metrics endpoint, or on a dedicated listen IP/port.
+# Metrics may be considered sensitive information, so before you enable them, be sure you know what you are
+# doing, and/or secure access to the endpoint in your reverse proxy.
+#
+# - enable-metrics enables the /metrics endpoint for the default ntfy server (i.e. HTTP, HTTPS and/or Unix socket)
+# - metrics-listen-http exposes the metrics endpoint via a dedicated [IP]:port. If set, this option implicitly
+#   enables metrics as well, e.g. "10.0.1.1:9090" or ":9090"
+#
+enable-metrics: true
+metrics-listen-http: "{{ ntfy_internal_ip }}:9090"
+
 # Logging options
 #
 # By default, ntfy logs to the console (stderr), with a "info" log level, and in a human-readable text format.

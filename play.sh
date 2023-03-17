@@ -6,7 +6,4 @@ if [ -z "$1" ]; then
 fi
 
 export env="$1"
-ansible-playbook \
-    -i "inventory/$env.yml" \
-    -e "@secrets/$env.yml" \
-    playbook.yml
+ansible-playbook -i "inventory/$env.yml" -e "@secrets/$env.yml" playbook.yml

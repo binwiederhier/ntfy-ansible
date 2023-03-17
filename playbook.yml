@@ -6,3 +6,4 @@
     - pcopy
     - fail2ban
     - nginx
+    - node_exporter
