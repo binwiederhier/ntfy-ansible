@@ -299,6 +299,14 @@ billing-contact: "{{ ntfy_billing_contact }}"
 enable-metrics: true
 metrics-listen-http: "{{ ntfy_internal_ip }}:9090"
 
+# Profiling
+#
+# ntfy can expose Go's net/http/pprof endpoints to support profiling of the ntfy server. If enabled, ntfy will listen
+# on a dedicated listen IP/port, which can be accessed via the web browser on http://<ip>:<port>/debug/pprof/.
+# This can be helpful to expose bottlenecks, and visualize call flows. See https://pkg.go.dev/net/http/pprof for details.
+#
+profile-listen-http: "127.0.0.1:2586"
+
 # Logging options
 #
 # By default, ntfy logs to the console (stderr), with a "info" log level, and in a human-readable text format.
