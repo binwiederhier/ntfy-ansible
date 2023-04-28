@@ -43,6 +43,55 @@
     mode: 0755
 
 
+# Website user/pass
+
+- name: Ensure group "website" exists
+  group:
+    state: present
+    name: website
+    system: true
+
+- name: Ensure user "website" exists
+  user:
+    state: present
+    name: website
+    group: website
+    home: /home/website
+    shell: /bin/bash
+
+- name: Ensure /home/website/.ssh exists
+  file:
+    path: /home/website/.ssh
+    state: directory
+    mode: 0755
+    owner: website
+    group: website
+
+- name: Set authorized_keys for "website" exists
+  copy:
+    content: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOSzw3/tYx1o1kVchrLNxHLztpOStbX0jd0pUxQfzRwe github-actions-for-ntfy-website"
+    dest: /home/website/.ssh/authorized_keys
+    owner: website
+    group: website
+    mode: 0600
+
+- name: Ensure /var/www/website exists
+  file:
+    path: /var/www/website
+    state: directory
+    mode: 0755
+    owner: website
+    group: website
+
+- name: Ensure /var/www/website/html exists
+  file:
+    path: /var/www/website/html
+    state: directory
+    mode: 0755
+    owner: website
+    group: website
+
+
 # Certbot & AWS config for certbot-route53 plugin
 
 - name: Install /root/.aws/config
@@ -74,6 +123,7 @@
     group: root
     mode: 0744
 
+
 # Custom scaling configs
 
 - name: Install sysctl config /etc/sysctl.d/88-custom.conf
@@ -83,6 +133,7 @@
     owner: root
     group: root
     mode: 0644
+
 
 # Custom cronjobs and scripts
 

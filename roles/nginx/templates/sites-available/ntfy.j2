@@ -2,20 +2,22 @@ upstream ntfy {
   server unix:/tmp/ntfy.sock;
 }
 
+map $request_method$request_uri $redirect_https {
+    "~^GET/($|[-_a-z0-9]{0,64}$|docs/|static/|_next|_site)" yes;
+    default                                                 no;
+}
+
+map $request_method$request_uri $proxy_to_backend {
+    GET/     no;
+    default  yes;
+}
+
 server {
   listen 80;
   server_name {{ ntfy_domain }};
 
   location / {
-    # Redirect to HTTPS
-    set $redirect_https "";
-    if ($request_method = GET) {
-      set $redirect_https "yes";
-    }
-    if ($request_uri ~* "^/([-_a-z0-9]{0,64}$|docs/|static/)") {
-      set $redirect_https "${redirect_https}yes";
-    }
-    if ($redirect_https = "yesyes") {
+    if ($redirect_https = yes) {
       return 302 https://$http_host$request_uri$is_args$query_string;
     }
 
@@ -60,8 +62,7 @@ server {
     # Rate limit (fail2ban)
     limit_req zone=one burst=1000 nodelay;
 
-    # Proxy to backend
-    proxy_pass http://ntfy;
+    # Proxy config
     proxy_http_version 1.1;
 
     proxy_buffering off;
@@ -78,11 +79,26 @@ server {
     proxy_read_timeout 3m;
 
     client_max_body_size 0; # Stream request body to backend
+
+    # Proxy to ntfy backend
+    if ($proxy_to_backend = yes) {
+        proxy_pass http://ntfy;
+        break;
+    }
+
+    # Serve ntfy website
+    root /var/www/website/html;
+    try_files $uri /index.html;
   }
 
   location /docs {
     rewrite ^/docs/?$ https://docs.ntfy.sh/ redirect;
     rewrite ^/docs/(.+)$ https://docs.ntfy.sh/$1 redirect;
     return 302 https://docs.ntfy.sh/;
+  }
+
+  location ~/(_site|_next) {
+    root /var/www/website/html;
+    try_files $uri /index.html;
   }
 }
