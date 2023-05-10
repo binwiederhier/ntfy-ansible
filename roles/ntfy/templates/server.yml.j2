@@ -123,7 +123,7 @@ behind-proxy: true
 #
 attachment-expiry-duration: "3h"
 attachment-total-size-limit: "60G"
-attachment-file-size-limit: "5M"
+attachment-file-size-limit: "2M"
 attachment-cache-dir: "/var/cache/ntfy/attachments"
 
 # If enabled, allow outgoing e-mail notifications via the 'X-Email' header. If this header is set,
@@ -242,20 +242,20 @@ visitor-request-limit-exempt-hosts: "up.schildi.chat,matrix.gateway.unifiedpush.
 # every day at midnight UTC. If the limit is not set (or set to zero), the request
 # limit (see above) governs the upper limit.
 #
-visitor-message-daily-limit: 500
+visitor-message-daily-limit: 250
 
 # Rate limiting: Allowed emails per visitor:
 # - visitor-email-limit-burst is the initial bucket of emails each visitor has
 # - visitor-email-limit-replenish is the rate at which the bucket is refilled
 #
-visitor-email-limit-burst: 10
-visitor-email-limit-replenish: "144m" # 10 per day
+visitor-email-limit-burst: 5
+visitor-email-limit-replenish: "288m" # 5 per day
 
 # Rate limiting: Attachment size and bandwidth limits per visitor:
 # - visitor-attachment-total-size-limit is the total storage limit used for attachments per visitor
 # - visitor-attachment-daily-bandwidth-limit is the total daily attachment download/upload traffic limit per visitor
 #
-visitor-attachment-total-size-limit: "50M"
+visitor-attachment-total-size-limit: "20M"
 visitor-attachment-daily-bandwidth-limit: "200M"
 
 # Rate limiting: Enable subscriber-based rate limiting (mostly used for UnifiedPush)
