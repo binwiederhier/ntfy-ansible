@@ -25,6 +25,7 @@ ntfy tier add \
   --message-limit=2500 \
   --message-expiry-duration=5d \
   --email-limit=50 \
+  --call-limit=3 \
   --attachment-file-size-limit=25M \
   --attachment-total-size-limit=500M \
   --attachment-expiry-duration=1d \
@@ -40,6 +41,7 @@ ntfy tier add \
   --message-limit=20000 \
   --message-expiry-duration=30d \
   --email-limit=250 \
+  --call-limit=20 \
   --attachment-file-size-limit=250M \
   --attachment-total-size-limit=2G \
   --attachment-expiry-duration=3d \
@@ -55,6 +57,7 @@ ntfy tier add \
   --message-limit=50000 \
   --message-expiry-duration=60d \
   --email-limit=500 \
+  --call-limit=50 \
   --attachment-file-size-limit=1G \
   --attachment-total-size-limit=10G \
   --attachment-expiry-duration=7d \

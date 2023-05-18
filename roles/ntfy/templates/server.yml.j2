@@ -153,6 +153,18 @@ smtp-server-listen: ":25"
 smtp-server-domain: "{{ ntfy_domain }}"
 smtp-server-addr-prefix: "ntfy-"
 
+# If enabled, ntfy can perform voice calls via Twilio via the "X-Call" header.
+#
+# - twilio-account is the Twilio account SID, e.g. AC12345beefbeef67890beefbeef122586
+# - twilio-auth-token is the Twilio auth token, e.g. affebeef258625862586258625862586
+# - twilio-phone-number is the outgoing phone number you purchased, e.g. +18775132586
+# - twilio-verify-service is the Twilio Verify service SID, e.g. VA12345beefbeef67890beefbeef122586
+#
+twilio-account: "{{ ntfy_twilio_account }}"
+twilio-auth-token: "{{ ntfy_twilio_auth_token }}"
+twilio-phone-number: "{{ ntfy_twilio_phone_number }}"
+twilio-verify-service: "{{ ntfy_twilio_verify_service }}"
+
 # Interval in which keepalive messages are sent to the client. This is to prevent
 # intermediaries closing the connection for inactivity.
 #
@@ -209,7 +221,12 @@ enable-reservations: true
 # the message ID of the original message, instructing the iOS app to poll this server for the actual message contents.
 # This is to prevent the upstream server and Firebase/APNS from being able to read the message.
 #
+# - upstream-base-url is the base URL of the upstream server. Should be "https://ntfy.sh".
+# - upstream-access-token is the token used to authenticate with the upstream server. This is only required
+#   if you exceed the upstream rate limits, or the uptream server requires authentication.
+#
 # upstream-base-url:
+# upstream-access-token:
 
 # Rate limiting: Total number of topics before the server rejects new topics.
 #

@@ -8,8 +8,8 @@ map $request_method$request_uri $redirect_https {
 }
 
 map $request_method$request_uri $proxy_to_backend {
-    GET/     no;
-    default  yes;
+    "~^GET/($|\?)" no;
+    default      yes;
 }
 
 server {
