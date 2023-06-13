@@ -6,4 +6,3 @@ all:
     ntfy_domain: "dev.ntfy.sh"
     ntfy_stats_topic: "stats-dev"
     ntfy_internal_ip: "192.168.1.109"
-    nopaste_domain: "dev.nopaste.net"

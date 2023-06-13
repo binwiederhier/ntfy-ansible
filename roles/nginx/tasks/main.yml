@@ -23,23 +23,17 @@
 
 - name: Install sites to /etc/nginx/sites-available
   template:
-    src: sites-available/{{ item }}.j2
-    dest: /etc/nginx/sites-available/{{ item }}
+    src: sites-available/ntfy.j2
+    dest: /etc/nginx/sites-available/ntfy
     owner: root
     group: root
     mode: 0644
-  loop:
-    - ntfy
-    - nopaste
 
 - name: Enable sites
   file:
-    src: /etc/nginx/sites-available/{{ item }}
-    dest: /etc/nginx/sites-enabled/{{ item }}
+    src: /etc/nginx/sites-available/ntfy
+    dest: /etc/nginx/sites-enabled/ntfy
     state: link
-  loop:
-    - ntfy
-    - nopaste
 
 - name: Disabling default site
   file:
