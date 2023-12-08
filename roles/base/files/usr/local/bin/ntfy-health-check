@@ -4,16 +4,17 @@
 
 topicurl=https://ntfy.sh/healthcheck
 pingurl="${ntfy_health_check_ping_url}"
+pass="${ntfy_health_check_pass}"
 date=$(date +%s)
 random=x$RANDOM$RANDOM
 
 echo "[$(date)] Performing health check to $topicurl ..."
-if ! curl -s -m 10 --retry 3 -o /dev/null -d "random:$random date:$date" "$topicurl"; then
+if ! curl -s -m 10 --retry 3 -u "healthcheck:$pass" -o /dev/null -d "random:$random date:$date" "$topicurl"; then
 	echo "[$(date)] Health check FAILED: Cannot post message"
 	exit 1
 fi
 sleep 2
-if ! curl -s -m 10 --retry 5 "$topicurl/json?poll=1&since=$date" | grep -q "$random"; then
+if ! curl -s -m 10 --retry 5 -u "healthcheck:$pass" "$topicurl/json?poll=1&since=$date" | grep -q "$random"; then
 	echo "[$(date)] Health check FAILED: No message with random identifier $random found."
 	exit 1
 fi
