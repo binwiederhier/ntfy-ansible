@@ -1,0 +1,4 @@
+#!/bin/bash
+
+date="$(date +'%Y-%m-%dT%H:%M:%S')"
+curl --max-time 10 -s "localhost:2586/debug/pprof/goroutine?debug=1" | while read line; do echo "$date $line"; done >> /var/log/ntfy-goroutine.log

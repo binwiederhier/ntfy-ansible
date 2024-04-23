@@ -4,3 +4,10 @@
     compress
     missingok
 }
+
+/var/log/ntfy-goroutine.log {
+    rotate 90
+    daily
+    compress
+    missingok
+}

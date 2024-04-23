@@ -1,0 +1,21 @@
+#!/bin/bash
+
+. /etc/custom/custom.conf
+
+echo "[$(date)] Checking number of goroutines ..."
+restart="$(curl --max-time 5 -s "http://${ntfy_internal_ip}:9090" | awk '$1 == "go_goroutines" { if ($2 > 35000) { print "RESTART" } }')"
+
+if [ "${restart}" = "RESTART" ]; then
+	echo "[$(date)] Sending alert"
+	curl \
+	  -H "Title: Executing emergency restart" \
+	  -H "Tags: warning" \
+	  -d "Too many Goroutines detected in ntfy-emergency-restart script" \
+	  "${ntfy_topic_url}"
+	sleep 1
+
+	echo "[$(date)] Executing emergency restart"
+	shutdown -r now
+	sleep 2
+fi
+echo "[$(date)] Done"

@@ -1,7 +1,8 @@
 /var/log/ntfy.log {
-    rotate 52
-    weekly
+    rotate 365
+    daily
     compress
     copytruncate
     missingok
 }
+

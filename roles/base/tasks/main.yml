@@ -145,12 +145,14 @@
     group: root
     mode: 0700
   loop:
-    - checkdiskspace
+    - ntfy-checkdiskspace
     - ntfy-database-backup
     - ntfy-health-check
     - ntfy-ssh-login
     - ntfy-stats
     - ntfy-setup
+    - ntfy-debug
+    - ntfy-emergency-restart
 
 - name: Install custom cronjobs /etc/cron.d/custom
   copy:
