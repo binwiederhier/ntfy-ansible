@@ -23,7 +23,7 @@ ntfy tier add \
   --name=Supporter \
   --reservation-limit=3 \
   --message-limit=2500 \
-  --message-expiry-duration=5d \
+  --message-expiry-duration=1d \
   --email-limit=50 \
   --call-limit=3 \
   --attachment-file-size-limit=25M \
@@ -39,7 +39,7 @@ ntfy tier add \
   --name=Pro \
   --reservation-limit=10 \
   --message-limit=20000 \
-  --message-expiry-duration=30d \
+  --message-expiry-duration=2d \
   --email-limit=250 \
   --call-limit=20 \
   --attachment-file-size-limit=250M \
@@ -55,7 +55,7 @@ ntfy tier add \
   --name=Business \
   --reservation-limit=50 \
   --message-limit=50000 \
-  --message-expiry-duration=60d \
+  --message-expiry-duration=3d \
   --email-limit=500 \
   --call-limit=50 \
   --attachment-file-size-limit=1G \
