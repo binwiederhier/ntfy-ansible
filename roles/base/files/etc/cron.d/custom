@@ -5,5 +5,5 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 58    23 *   *   *   root /usr/local/bin/ntfy-stats > /dev/null
 12,42 *  *   *   *   root /usr/local/bin/ntfy-database-backup > /dev/null 2>&1
 */2   *  *   *   *   root /usr/local/bin/ntfy-emergency-restart
-*/5   *  *   *   *   root /usr/local/bin/ntfy-debug
+*/2   *  *   *   *   root /usr/local/bin/ntfy-debug
 */7   *  *   *   *   root /usr/local/bin/ntfy-checkdiskspace
