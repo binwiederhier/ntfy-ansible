@@ -15,6 +15,7 @@
   loop:
     - nginx-400.conf
     - nginx-429.conf
+    - nginx-507.conf
     - manual.conf
 
 - name: Installing fail2ban jails
@@ -28,6 +29,7 @@
     - nginx-limit-req.local
     - nginx-400.local
     - nginx-429.local
+    - nginx-507.local
     - manual.local
 
 - name: Ensure dummy log file exists /var/log/fail2ban-manual.log
