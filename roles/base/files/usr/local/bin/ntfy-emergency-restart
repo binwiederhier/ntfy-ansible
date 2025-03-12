@@ -3,7 +3,7 @@
 . /etc/custom/custom.conf
 
 echo "[$(date)] Checking number of goroutines ..."
-restart="$(curl --max-time 5 -s "http://${ntfy_internal_ip}:9090" | awk '$1 == "go_goroutines" { if ($2 > 35000) { print "RESTART" } }')"
+restart="$(curl --max-time 5 -s "http://${ntfy_internal_ip}:9090" | awk '$1 == "go_goroutines" { if ($2 > 50000) { print "RESTART" } }')"
 
 if [ "${restart}" = "RESTART" ]; then
 	echo "[$(date)] Sending alert"
