@@ -5,4 +5,4 @@ all:
   vars:
     ntfy_domain: "staging.ntfy.sh"
     ntfy_stats_topic: "stats-staging"
-    ntfy_internal_ip: "10.116.0.3"
+    ntfy_internal_ip: "10.108.0.5"
