@@ -307,8 +307,8 @@ visitor-email-limit-replenish: "288m" # 5 per day
 #
 # By default, ntfy uses the full IPv4 address (32 bits) and the /64 subnet of the IPv6 address (64 bits).
 #
-visitor-prefix-bits-ipv4: 32
-visitor-prefix-bits-ipv6: 48 # See "roles/fail2ban/files/action.d/iptables-multiport-custom.conf"
+visitor-prefix-bits-ipv4: 32 # Must match "roles/fail2ban/files/action.d/iptables-multiport-custom.conf"
+visitor-prefix-bits-ipv6: 56 # Must match "roles/fail2ban/files/action.d/iptables-multiport-custom.conf"
 
 # Rate limiting: Attachment size and bandwidth limits per visitor:
 # - visitor-attachment-total-size-limit is the total storage limit used for attachments per visitor

@@ -14,6 +14,7 @@ map $request_method$request_uri $proxy_to_backend {
 
 server {
   listen 80;
+  listen [::]:80;
   server_name {{ ntfy_domain }};
 
   location / {
@@ -53,6 +54,7 @@ server {
 
 server {
   listen 443 ssl http2;
+  listen [::]:443 ssl http2;
   server_name {{ ntfy_domain }};
 
   ssl_certificate /etc/letsencrypt/live/{{ ntfy_domain }}/fullchain.pem;
