@@ -32,6 +32,16 @@
     - nginx-507.local
     - manual.local
 
+- name: Installing fail2ban actions
+  copy:
+    src: action.d/{{ item }}
+    dest: /etc/fail2ban/action.d/{{ item }}
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - iptables-multiport-custom.conf
+
 - name: Ensure dummy log file exists /var/log/fail2ban-manual.log
   copy:
     content: "dummy log file"
