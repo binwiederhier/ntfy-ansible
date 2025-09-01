@@ -1,0 +1,8 @@
+---
+- hosts: all
+  roles:
+    - base
+    - aptly
+    - fail2ban
+    - nginx
+    - node_exporter

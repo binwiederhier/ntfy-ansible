@@ -1,0 +1,11 @@
+---
+- name: restart aptly
+  systemd:
+    name: aptly
+    state: restarted
+  when: aptly_service_enabled | default(false)
+
+- name: restart nginx
+  systemd:
+    name: nginx
+    state: restarted

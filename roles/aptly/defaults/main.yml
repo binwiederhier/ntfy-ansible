@@ -1,0 +1,17 @@
+---
+aptly_user: aptly
+aptly_group: aptly
+aptly_home: /opt/aptly
+aptly_data_dir: "{{ aptly_home }}/data"
+aptly_config_dir: "{{ aptly_home }}/config"
+aptly_repo_name: ntfy
+aptly_distribution: stable
+aptly_architectures:
+  - amd64
+  - arm64
+  - armhf
+aptly_gpg_key_id: ""
+aptly_gpg_passphrase: ""
+aptly_publish_endpoint: filesystem:public
+nginx_aptly_server_name: repo.example.com
+nginx_aptly_root: "{{ aptly_home }}/public"

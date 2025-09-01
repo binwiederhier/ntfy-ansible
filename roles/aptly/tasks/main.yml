@@ -1,0 +1,100 @@
+---
+- name: Install aptly and dependencies
+  apt:
+    name:
+      - aptly
+      - gnupg2
+      - nginx
+    state: present
+    update_cache: yes
+
+- name: Create aptly user
+  user:
+    name: "{{ aptly_user }}"
+    group: "{{ aptly_group }}"
+    home: "{{ aptly_home }}"
+    shell: /bin/bash
+    system: yes
+    create_home: yes
+
+- name: Create aptly directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ aptly_user }}"
+    group: "{{ aptly_group }}"
+    mode: '0755'
+  loop:
+    - "{{ aptly_data_dir }}"
+    - "{{ aptly_config_dir }}"
+    - "{{ aptly_home }}/public"
+    - "{{ aptly_home }}/upload"
+
+- name: Generate aptly configuration
+  template:
+    src: aptly.conf.j2
+    dest: "{{ aptly_config_dir }}/aptly.conf"
+    owner: "{{ aptly_user }}"
+    group: "{{ aptly_group }}"
+    mode: '0644'
+  notify: restart aptly
+
+- name: Import GPG key for package signing
+  shell: |
+    echo "{{ aptly_gpg_passphrase }}" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 --import
+  become_user: "{{ aptly_user }}"
+  when: aptly_gpg_key_id != ""
+  no_log: true
+
+- name: Create aptly repository
+  shell: |
+    aptly repo create -distribution="{{ aptly_distribution }}" -architectures="{{ aptly_architectures | join(',') }}" "{{ aptly_repo_name }}"
+  become_user: "{{ aptly_user }}"
+  environment:
+    GNUPGHOME: "{{ aptly_home }}/.gnupg"
+  ignore_errors: yes
+
+- name: Publish aptly repository
+  shell: |
+    aptly publish repo -distribution="{{ aptly_distribution }}" "{{ aptly_repo_name }}" "{{ aptly_publish_endpoint }}"
+  become_user: "{{ aptly_user }}"
+  environment:
+    GNUPGHOME: "{{ aptly_home }}/.gnupg"
+  ignore_errors: yes
+
+- name: Configure nginx for aptly repository
+  template:
+    src: nginx-aptly.conf.j2
+    dest: /etc/nginx/sites-available/aptly
+    mode: '0644'
+  notify: restart nginx
+
+- name: Enable nginx aptly site
+  file:
+    src: /etc/nginx/sites-available/aptly
+    dest: /etc/nginx/sites-enabled/aptly
+    state: link
+  notify: restart nginx
+
+- name: Create upload script for manual package addition
+  template:
+    src: add-package.sh.j2
+    dest: "{{ aptly_home }}/add-package.sh"
+    owner: "{{ aptly_user }}"
+    group: "{{ aptly_group }}"
+    mode: '0755'
+
+- name: Set up logrotate for aptly
+  copy:
+    dest: /etc/logrotate.d/aptly
+    content: |
+      {{ aptly_home }}/logs/*.log {
+        daily
+        missingok
+        rotate 52
+        compress
+        delaycompress
+        notifempty
+        create 644 {{ aptly_user }} {{ aptly_group }}
+      }
+    mode: '0644'
