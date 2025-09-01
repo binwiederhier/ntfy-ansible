@@ -1,180 +1,71 @@
 ---
 
-# APT repository
+# Basic system setup and security
 
-- name: Create /etc/apt/keyrings/
-  file:
-    path: /etc/apt/keyrings/
-    state: directory
-    mode: 0755
-
-- name: Install archive.heckel.io repository keyring
-  ansible.builtin.get_url:
-    url: https://archive.heckel.io/apt/keyring.gpg
-    dest: /etc/apt/keyrings/archive.heckel.io.gpg
-
-- name: Add archive.heckel.io repository
-  apt_repository:
-    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/archive.heckel.io.gpg] https://archive.heckel.io/apt debian main"
-    state: present
-    filename: ntfy
-
-
-# Custom config for scripts
-
-- name: Create /etc/custom
-  file:
-    path: /etc/custom
-    state: directory
-    mode: 0755
-
-- name: Install /etc/custom/custom.conf
-  template:
-    src: etc/custom/custom.conf.j2
-    dest: /etc/custom/custom.conf
-    owner: root
-    group: root
-    mode: 0600
-
-- name: Create /root/.aws
-  file:
-    path: /root/.aws
-    state: directory
-    mode: 0755
-
-
-# Website user/pass
-
-- name: Ensure group "website" exists
-  group:
-    state: present
-    name: website
-    system: true
-
-- name: Ensure user "website" exists
-  user:
-    state: present
-    name: website
-    group: website
-    home: /home/website
-    shell: /bin/bash
-
-- name: Ensure /home/website/.ssh exists
-  file:
-    path: /home/website/.ssh
-    state: directory
-    mode: 0755
-    owner: website
-    group: website
-
-- name: Set authorized_keys for "website" exists
-  copy:
-    content: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOSzw3/tYx1o1kVchrLNxHLztpOStbX0jd0pUxQfzRwe github-actions-for-ntfy-website"
-    dest: /home/website/.ssh/authorized_keys
-    owner: website
-    group: website
-    mode: 0600
-
-- name: Ensure /var/www/website exists
-  file:
-    path: /var/www/website
-    state: directory
-    mode: 0755
-    owner: website
-    group: website
-
-- name: Ensure /var/www/website/html exists
-  file:
-    path: /var/www/website/html
-    state: directory
-    mode: 0755
-    owner: website
-    group: website
-
-
-# Certbot & AWS config for certbot-route53 plugin
-
-- name: Install /root/.aws/config
-  copy:
-    content: "{{ aws_config }}"
-    dest: /root/.aws/config
-    owner: root
-    group: root
-    mode: 0600
-
-- name: Install certbot
+- name: Update apt cache
   apt:
-    pkg:
-      - certbot
-      - python3-certbot-dns-route53
-    state: latest
+    update_cache: yes
+    cache_valid_time: 3600
 
-- name: Create /etc/letsencrypt/renewal-hooks/post
-  file:
-    path: /etc/letsencrypt/renewal-hooks/post
-    state: directory
-    mode: 0755
+- name: Install essential packages
+  apt:
+    name:
+      - curl
+      - wget
+      - unzip
+      - git
+      - htop
+      - vim
+      - ufw
+    state: present
 
-- name: Install certbot post hook /etc/letsencrypt/renewal-hooks/post/nginx-reload
-  copy:
-    src: etc/letsencrypt/renewal-hooks/post/nginx-reload
-    dest: /etc/letsencrypt/renewal-hooks/post/nginx-reload
-    owner: root
-    group: root
-    mode: 0744
-
-
-# Custom scaling configs
-
-- name: Install sysctl config /etc/sysctl.d/88-custom.conf
-  copy:
-    src: etc/sysctl.d/88-custom.conf
-    dest: /etc/sysctl.d/88-custom.conf
-    owner: root
-    group: root
-    mode: 0644
-
-
-# Custom cronjobs and scripts
-
-- name: Installing scripts in /usr/local/bin
-  copy:
-    src: usr/local/bin/{{ item }}
-    dest: /usr/local/bin/{{ item }}
-    owner: root
-    group: root
-    mode: 0700
+- name: Configure UFW defaults
+  ufw:
+    direction: "{{ item.direction }}"
+    policy: "{{ item.policy }}"
   loop:
-    - ntfy-checkdiskspace
-    - ntfy-database-backup
-    - ntfy-health-check
-    - ntfy-ssh-login
-    - ntfy-stats
-    - ntfy-setup
-    - ntfy-debug
-    - ntfy-emergency-restart
+    - { direction: 'incoming', policy: 'deny' }
+    - { direction: 'outgoing', policy: 'allow' }
 
-- name: Install custom cronjobs /etc/cron.d/custom
+- name: Allow SSH
+  ufw:
+    rule: allow
+    name: OpenSSH
+
+- name: Allow HTTP
+  ufw:
+    rule: allow
+    port: '80'
+
+- name: Allow HTTPS
+  ufw:
+    rule: allow
+    port: '443'
+
+- name: Enable UFW
+  ufw:
+    state: enabled
+
+- name: Set timezone
+  timezone:
+    name: UTC
+
+- name: Configure automatic security updates
+  apt:
+    name: unattended-upgrades
+    state: present
+
+- name: Configure unattended-upgrades
   copy:
-    src: etc/cron.d/custom
-    dest: /etc/cron.d/custom
-    owner: root
-    group: root
-    mode: 0644
-
-- name: Install custom logrotate config /etc/logrotate.d/custom
-  copy:
-    src: etc/logrotate.d/custom
-    dest: /etc/logrotate.d/custom
-    owner: root
-    group: root
-    mode: 0644
-
-
-# SSH login alert
-
-- name: Enable alerts on SSH login
-  lineinfile:
-    path: /etc/pam.d/sshd
-    regexp: 'ntfy-ssh-login'
-    line: session optional pam_exec.so /usr/local/bin/ntfy-ssh-login
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
+    content: |
+      Unattended-Upgrade::Allowed-Origins {
+          "${distro_id}:${distro_codename}-security";
+          "${distro_id}ESMApps:${distro_codename}-apps-security";
+          "${distro_id}ESM:${distro_codename}-infra-security";
+      };
+      Unattended-Upgrade::AutoFixInterruptedDpkg "true";
+      Unattended-Upgrade::MinimalSteps "true";
+      Unattended-Upgrade::Remove-Unused-Dependencies "true";
+      Unattended-Upgrade::Automatic-Reboot "false";
+    mode: '0644'

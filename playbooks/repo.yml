@@ -1,8 +1,5 @@
 ---
-- hosts: all
+- hosts: repo
   roles:
     - base
     - aptly
-    - fail2ban
-    - nginx
-    - node_exporter
