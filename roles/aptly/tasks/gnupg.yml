@@ -1,0 +1,35 @@
+---
+
+- name: Ensure ~/.gnupg exists
+  file:
+    path: "{{ repo_gpg_homedir }}"
+    state: directory
+    owner: "{{ repo_user }}"
+    group: "{{ repo_group }}"
+    mode: '0700'
+
+- name: Copy private key to target
+  copy:
+    content: "{{ repo_gpg_private_file }}"
+    dest: "{{ repo_gpg_homedir }}/ntfy-privkey.asc"
+    owner: "{{ repo_user }}"
+    group: "{{ repo_group }}"
+    mode: '0600'
+
+- name: Copy public key to target
+  copy:
+    content: "{{ repo_gpg_public_file }}"
+    dest: "{{ repo_gpg_homedir }}/ntfy-pubkey.asc"
+    owner: "{{ repo_user }}"
+    group: "{{ repo_group }}"
+    mode: '0644'
+
+- name: Import private key
+  command: gpg --batch --import "{{ repo_gpg_homedir }}/ntfy-pubkey.asc"
+  become: true
+  become_user: "{{ repo_user }}"
+
+- name: Import public key
+  command: gpg --batch --import "{{ repo_gpg_homedir }}/ntfy-privkey.asc"
+  become: true
+  become_user: "{{ repo_user }}"

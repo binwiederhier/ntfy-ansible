@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ntfy.sh Debian repository</title>
+  <style>
+      body {
+          max-width: 800px;
+          margin: 2rem auto;
+          font-family: sans-serif;
+          line-height: 1.5;
+      }
+
+      pre {
+          background: #f5f5f5;
+          padding: 1em;
+          overflow-x: auto;
+      }
+
+      h1, h2 {
+          border-bottom: 1px solid #ccc;
+          padding-bottom: .3em;
+      }
+
+      a {
+          color: #338574;
+          text-decoration: underline;
+      }
+
+      a:hover {
+          text-decoration: none;
+      }
+  </style>
+</head>
+<body>
+
+<img src="logo.png" alt="ntfy.sh" style="width: 100px; height: 100px" />
+<h1>Official ntfy.sh Debian repository</h1>
+
+<p>This is the official Debian/Ubuntu package repository for <a href="https://ntfy.sh">ntfy</a>.</p>
+
+<h2>Install instructions</h2>
+<p>To allow the system to check the packages authenticity, you need to install the ntfy keyring:</p>
+<pre>sudo mkdir -p /etc/apt/keyrings
+sudo curl -L -o /etc/apt/keyrings/ntfy-keyring.gpg https://{{ repo_server_name }}/apt/keyring.gpg</pre>
+
+<p>Then add the repository to your apt sources:</p>
+<pre><code>echo "deb [signed-by=/etc/apt/keyrings/ntfy-keyring.gpg] https://{{ repo_server_name }}/apt stable main" \
+  | sudo tee /etc/apt/sources.list.d/ntfy.list
+</code></pre>
+
+<p>Finally, update and install:</p>
+<pre><code>sudo apt update
+sudo apt install ntfy
+</code></pre>
+
+<h2>Source</h2>
+<p>Packages are built from the official <a href="https://github.com/binwiederhier/ntfy">ntfy GitHub repository</a>.</p>
+</body>
+</html>

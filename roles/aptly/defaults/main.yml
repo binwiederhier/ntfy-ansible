@@ -1,17 +1,27 @@
 ---
-aptly_user: aptly
-aptly_group: aptly
-aptly_home: /opt/aptly
-aptly_data_dir: "{{ aptly_home }}/data"
-aptly_config_dir: "{{ aptly_home }}/config"
-aptly_repo_name: ntfy
-aptly_distribution: stable
-aptly_architectures:
+repo_user: repo
+repo_user_home: "/home/{{ repo_user }}"
+repo_group: "{{ repo_user }}"
+repo_debdir: "{{ repo_user_home }}/debs"
+repo_pubdir: "/var/www/repo/html"
+repo_aptly_pubdir: "{{ repo_pubdir }}/apt"
+repo_aptly_repo: ntfy
+repo_aptly_dist: stable
+repo_aptly_component: main
+repo_aptly_archs:
   - amd64
   - arm64
-  - armhf
-aptly_gpg_key_id: ""
-aptly_gpg_passphrase: ""
-aptly_publish_endpoint: filesystem:public
-nginx_aptly_server_name: repo.example.com
-nginx_aptly_root: "{{ aptly_home }}/public"
+  - arm7
+repo_gpg_homedir: "{{ repo_user_home }}/.gnupg"
+
+# Secrets
+# - repo_gpg_public_file: |
+#   -----BEGIN PGP PUBLIC KEY BLOCK-----
+#   ...
+#
+# - repo_gpg_private_file: |
+#   -----BEGIN PGP PRIVATE KEY BLOCK-----
+#   ...
+#
+# - repo_apt_keyring_file: |
+#   <base64-encoded-keyring-file>

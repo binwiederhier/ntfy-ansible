@@ -1,0 +1,20 @@
+---
+
+- name: Configure nginx for repo
+  template:
+    src: nginx.conf.j2
+    dest: "/etc/nginx/sites-available/default"
+  become: true
+
+- name: Enable nginx site
+  file:
+    src: "/etc/nginx/sites-available/default"
+    dest: "/etc/nginx/sites-enabled/default"
+    state: link
+  become: true
+
+- name: Reload nginx
+  service:
+    name: nginx
+    state: reloaded
+  become: true

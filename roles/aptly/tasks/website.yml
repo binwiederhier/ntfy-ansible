@@ -1,0 +1,46 @@
+---
+
+- name: Ensure public web dir exists
+  file:
+    path: "{{ repo_pubdir }}"
+    state: directory
+    owner: "{{ repo_user }}"
+    group: "{{ repo_group }}"
+    mode: '0755'
+
+- name: Ensure apt public dir exists
+  file:
+    path: "{{ repo_aptly_pubdir }}"
+    state: directory
+    owner: "{{ repo_user }}"
+    group: "{{ repo_group }}"
+    mode: '0755'
+
+- name: Copy keyring file to web dir
+  copy:
+    content: "{{ repo_apt_keyring_file | b64decode }}"
+    dest: "{{ repo_aptly_pubdir }}/keyring.gpg"
+    owner: "{{ repo_user }}"
+    group: "{{ repo_group }}"
+    mode: '0644'
+  become: true
+
+- name: Copy website to web dir
+  template:
+    src: index.html.j2
+    dest: "{{ repo_aptly_pubdir }}/index.html"
+    owner: "{{ repo_user }}"
+    group: "{{ repo_group }}"
+    mode: '0644'
+  become: true
+
+- name: Copy logo to web dir
+  copy:
+    src: logo.png
+    dest: "{{ repo_aptly_pubdir }}/logo.png"
+    owner: "{{ repo_user }}"
+    group: "{{ repo_group }}"
+    mode: '0644'
+  become: true
+
+

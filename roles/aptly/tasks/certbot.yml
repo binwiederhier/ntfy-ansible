@@ -1,0 +1,34 @@
+---
+
+- name: Create /root/.aws
+  file:
+    path: /root/.aws
+    state: directory
+    mode: 0755
+
+- name: Install /root/.aws/config
+  copy:
+    content: "{{ aws_config }}"
+    dest: /root/.aws/config
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Create /etc/letsencrypt/renewal-hooks/post
+  file:
+    path: /etc/letsencrypt/renewal-hooks/post
+    state: directory
+    mode: 0755
+
+- name: Install certbot post hook /etc/letsencrypt/renewal-hooks/post/nginx-reload
+  template:
+    src: nginx-reload.sh.j2
+    dest: /etc/letsencrypt/renewal-hooks/post/nginx-reload
+    owner: root
+    group: root
+    mode: '0744'
+
+- name: Issue certificate
+  command:
+    cmd: certbot certonly --dns-route53 -d {{ repo_server_name }} --agree-tos -m ntfy@heckel.io -n
+    creates: /etc/letsencrypt/live/{{ repo_server_name }}

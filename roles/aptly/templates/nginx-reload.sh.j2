@@ -1,0 +1,10 @@
+#!/bin/bash
+
+systemctl reload nginx
+
+curl \
+  -d "Renewed certificate(s) on ntfy.sh host, and nginx reloaded" \
+  -H "Tags: information_source,tada" \
+  "{{ repo_ntfy_topic_url }}"
+
+
