@@ -18,7 +18,3 @@
       - vim
       - unattended-upgrades
     state: present
-
-- name: Set timezone
-  timezone:
-    name: UTC

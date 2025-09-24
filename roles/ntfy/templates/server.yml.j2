@@ -232,6 +232,9 @@ disallowed-topics:
   - blog
   - contact
   - admin
+{% for topic in ntfy_additional_disallowed_topics %}
+  - {{ topic }}
+{% endfor %}
 
 # Defines if the root route (/) is pointing to the landing page (as on ntfy.sh) or the
 # web app. If you self-host, you don't want to change this. Can be "app" (default) or "home".

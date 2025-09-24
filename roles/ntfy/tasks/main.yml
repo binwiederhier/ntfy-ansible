@@ -29,7 +29,7 @@
 
 - name: Install /etc/custom/custom.conf
   template:
-    src: etc/custom/custom.conf.j2
+    src: custom.conf.j2
     dest: /etc/custom/custom.conf
     owner: root
     group: root
