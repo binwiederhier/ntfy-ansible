@@ -2,7 +2,10 @@ all:
   hosts:
     ntfy:
       ansible_host: staging.ntfy.sh
+    repo:
+      ansible_host: staging.archive.ntfy.sh
   vars:
     ntfy_domain: "staging.ntfy.sh"
     ntfy_stats_topic: "stats-staging"
     ntfy_internal_ip: "10.108.0.5"
+    repo_server_name: "staging.archive.ntfy.sh"

@@ -1,0 +1,60 @@
+---
+
+- name: Ensure public web dir exists
+  file:
+    path: "{{ repo_pubdir }}"
+    state: directory
+    owner: "{{ repo_user }}"
+    group: "{{ repo_group }}"
+    mode: '0755'
+
+- name: Ensure apt public dir exists
+  file:
+    path: "{{ repo_aptly_pubdir }}"
+    state: directory
+    owner: "{{ repo_user }}"
+    group: "{{ repo_group }}"
+    mode: '0755'
+
+- name: Write aptly config
+  copy:
+    dest: "{{ repo_user_home }}/.aptly.conf"
+    owner: "{{ repo_user }}"
+    group: "{{ repo_group }}"
+    mode: '0644'
+    content: |
+      {
+        "rootDir": "{{ repo_user_home }}/.aptly",
+        "FileSystemPublishEndpoints": {
+          "local": {
+            "rootDir": "{{ repo_aptly_pubdir }}",
+            "linkMethod": "hardlink"
+          }
+        }
+      }
+  become: true
+
+- name: Create aptly repo if not exists
+  command: >
+    aptly repo create
+      -comment="Official ntfy.sh Debian repository"
+      -distribution={{ repo_aptly_dist }}
+      -component={{ repo_aptly_component }}
+      {{ repo_aptly_repo }}
+  args:
+    creates: "{{ repo_user_home }}/.aptly/db"
+  become: true
+  become_user: "{{ repo_user }}"
+
+- name: Initially publish empty repo
+  command: >
+    aptly publish repo
+      -architectures="{{ repo_aptly_archs | join(',') }}"
+      -distribution={{ repo_aptly_dist }}
+      {{ repo_aptly_repo }}
+      filesystem:local:
+  args:
+    creates: "{{ repo_aptly_pubdir }}/dists/{{ repo_aptly_dist }}"
+  become: true
+  become_user: "{{ repo_user }}"
+

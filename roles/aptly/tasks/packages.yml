@@ -1,0 +1,11 @@
+---
+
+- name: Install packages
+  apt:
+    pkg:
+      - aptly
+      - gnupg
+      - nginx
+      - certbot
+      - python3-certbot-dns-route53
+    state: latest

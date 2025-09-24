@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ntfy.sh Debian repository</title>
+
+  <!-- Mobile view -->
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.ico" />
+
+  <!-- Styles -->
+  <style>
+      body {
+          max-width: 800px;
+          margin: 1rem auto;
+          padding: 0 1rem;
+          font-family: system-ui, sans-serif;
+          line-height: 1.6;
+          font-size: 16px;
+      }
+
+      header {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          flex-wrap: wrap;
+      }
+
+      header img {
+          width: 80px;
+          height: 80px;
+          flex-shrink: 0;
+      }
+
+      h1, h2 {
+          border-bottom: 1px solid #ddd;
+          padding-bottom: .3em;
+          margin-top: 2rem;
+      }
+
+      pre {
+          background: #f8f8f8;
+          padding: 1em;
+          overflow-x: auto;
+          border-radius: 4px;
+      }
+
+      code {
+          font-family: ui-monospace, monospace;
+          font-size: 0.85em;
+      }
+
+      a {
+          color: #338574;
+          text-decoration: underline;
+      }
+
+      a:hover {
+          text-decoration: none;
+      }
+
+      @media (max-width: 500px) {
+          body {
+              font-size: 15px;
+          }
+          header img {
+              width: 60px;
+              height: 60px;
+          }
+      }
+  </style>
+</head>
+<body>
+
+<img src="logo.png" alt="ntfy.sh logo" style="width: 100px; height: 100px" />
+<h1>Official ntfy.sh Debian repository</h1>
+
+<p>This is the official Debian/Ubuntu package repository for <a href="https://ntfy.sh">ntfy</a>.</p>
+
+<h2>Install instructions</h2>
+<p>To allow the system to check package authenticity, install the ntfy keyring:</p>
+<pre><code>sudo mkdir -p /etc/apt/keyrings
+sudo curl -L -o /etc/apt/keyrings/ntfy.gpg https://{{ repo_server_name }}/apt/keyring.gpg
+</code></pre>
+
+<p>Add the repository to your apt sources:</p>
+<pre><code>echo "deb [signed-by=/etc/apt/keyrings/ntfy.gpg] https://{{ repo_server_name }}/apt stable main" \
+  | sudo tee /etc/apt/sources.list.d/ntfy.list
+</code></pre>
+
+<p>Finally, update and install:</p>
+<pre><code>sudo apt update
+sudo apt install ntfy
+</code></pre>
+
+<h2>Source</h2>
+<p>Packages are built from the official <a href="https://github.com/binwiederhier/ntfy">ntfy GitHub repository</a>.</p>
+
+</body>
+</html>

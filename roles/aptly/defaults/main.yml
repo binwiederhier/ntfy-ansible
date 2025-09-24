@@ -1,0 +1,27 @@
+---
+repo_user: repo
+repo_user_home: "/home/{{ repo_user }}"
+repo_group: "{{ repo_user }}"
+repo_debdir: "{{ repo_user_home }}/debs"
+repo_pubdir: "/var/www/repo/html"
+repo_aptly_pubdir: "{{ repo_pubdir }}/apt"
+repo_aptly_repo: ntfy
+repo_aptly_dist: stable
+repo_aptly_component: main
+repo_aptly_archs:
+  - amd64
+  - arm64
+  - armhf # armv7
+repo_gpg_homedir: "{{ repo_user_home }}/.gnupg"
+
+# Secrets
+# - repo_gpg_public_file: |
+#   -----BEGIN PGP PUBLIC KEY BLOCK-----
+#   ...
+#
+# - repo_gpg_private_file: |
+#   -----BEGIN PGP PRIVATE KEY BLOCK-----
+#   ...
+#
+# - repo_apt_keyring_file: |
+#   <base64-encoded-keyring-file>

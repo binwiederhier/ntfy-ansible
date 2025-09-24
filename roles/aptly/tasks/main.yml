@@ -1,0 +1,26 @@
+---
+
+- name: Install packages
+  include_tasks: packages.yml
+
+- name: Create users
+  include_tasks: users.yml
+
+- name: Setup gnupg
+  include_tasks: gnupg.yml
+
+- name: Setup aptly
+  include_tasks: aptly.yml
+
+- name: Setup website
+  include_tasks: website.yml
+
+- name: Install certbot
+  include_tasks: certbot.yml
+
+- name: Install nginx
+  include_tasks: nginx.yml
+
+- name: Install tools
+  include_tasks: tools.yml
+

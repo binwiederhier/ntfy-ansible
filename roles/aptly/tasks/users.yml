@@ -1,0 +1,15 @@
+---
+
+- name: Create repo group
+  group:
+    name: "{{ repo_group }}"
+    system: yes
+
+- name: Create repo user
+  user:
+    name: "{{ repo_user }}"
+    group: "{{ repo_group }}"
+    home: "{{ repo_user_home }}"
+    shell: /bin/bash
+    system: yes
+    create_home: yes

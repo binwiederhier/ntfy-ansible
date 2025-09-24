@@ -1,0 +1,9 @@
+#!/bin/bash
+
+aptly repo add ntfy {{ repo_debdir }}/*
+aptly publish drop stable "filesystem:local:"
+aptly publish repo \
+  -architectures="{{ repo_aptly_archs | join(',') }}" \
+  -distribution="{{ repo_aptly_dist }}" \
+  "{{ repo_aptly_repo }}" \
+  "filesystem:local:"

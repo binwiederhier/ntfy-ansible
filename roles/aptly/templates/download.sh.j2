@@ -1,0 +1,12 @@
+#!/bin/bash
+
+version=$1
+
+if [ -z "version" ]; then
+	echo "Syntax: $0 VERSION"
+	exit 1
+fi
+
+for arch in armv7 arm64 amd64; do
+  wget -O "{{ repo_debdir }}/ntfy_${version}_linux_${arch}.deb" https://github.com/binwiederhier/ntfy/releases/download/v${version}/ntfy_${version}_linux_${arch}.deb
+done

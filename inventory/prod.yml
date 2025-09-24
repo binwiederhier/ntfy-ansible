@@ -2,7 +2,10 @@ all:
   hosts:
     ntfy:
       ansible_host: ntfy.sh
+    repo:
+      ansible_host: archive.ntfy.sh
   vars:
     ntfy_domain: "ntfy.sh"
     ntfy_stats_topic: "stats"
     ntfy_internal_ip: "10.108.0.2"
+    repo_server_name: "archive.ntfy.sh"

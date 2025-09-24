@@ -1,0 +1,25 @@
+---
+
+- name: Ensure ~/debs exists
+  file:
+    path: "{{ repo_debdir }}"
+    state: directory
+    owner: "{{ repo_user }}"
+    group: "{{ repo_group }}"
+    mode: '0744'
+
+- name: Create ~/update.sh
+  template:
+    src: update.sh.j2
+    dest: "{{ repo_user_home }}/update.sh"
+    owner: "{{ repo_user }}"
+    group: "{{ repo_group }}"
+    mode: '0755'
+
+- name: Create ~/download.sh
+  template:
+    src: download.sh.j2
+    dest: "{{ repo_user_home }}/download.sh"
+    owner: "{{ repo_user }}"
+    group: "{{ repo_group }}"
+    mode: '0755'
