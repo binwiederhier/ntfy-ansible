@@ -34,13 +34,16 @@
     mode: '0644'
   become: true
 
-- name: Copy logo to web dir
+- name: Copy static resources to web dir
   copy:
-    src: logo.png
-    dest: "{{ repo_aptly_pubdir }}/logo.png"
+    src: "{{ item }}"
+    dest: "{{ repo_aptly_pubdir }}/{{ item }}"
     owner: "{{ repo_user }}"
     group: "{{ repo_group }}"
     mode: '0644'
+  loop:
+    - logo.png
+    - favicon.ico
   become: true
 
 

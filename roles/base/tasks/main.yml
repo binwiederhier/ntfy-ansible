@@ -16,56 +16,9 @@
       - git
       - htop
       - vim
-      - ufw
+      - unattended-upgrades
     state: present
-
-- name: Configure UFW defaults
-  ufw:
-    direction: "{{ item.direction }}"
-    policy: "{{ item.policy }}"
-  loop:
-    - { direction: 'incoming', policy: 'deny' }
-    - { direction: 'outgoing', policy: 'allow' }
-
-- name: Allow SSH
-  ufw:
-    rule: allow
-    name: OpenSSH
-
-- name: Allow HTTP
-  ufw:
-    rule: allow
-    port: '80'
-
-- name: Allow HTTPS
-  ufw:
-    rule: allow
-    port: '443'
-
-- name: Enable UFW
-  ufw:
-    state: enabled
 
 - name: Set timezone
   timezone:
     name: UTC
-
-- name: Configure automatic security updates
-  apt:
-    name: unattended-upgrades
-    state: present
-
-- name: Configure unattended-upgrades
-  copy:
-    dest: /etc/apt/apt.conf.d/50unattended-upgrades
-    content: |
-      Unattended-Upgrade::Allowed-Origins {
-          "${distro_id}:${distro_codename}-security";
-          "${distro_id}ESMApps:${distro_codename}-apps-security";
-          "${distro_id}ESM:${distro_codename}-infra-security";
-      };
-      Unattended-Upgrade::AutoFixInterruptedDpkg "true";
-      Unattended-Upgrade::MinimalSteps "true";
-      Unattended-Upgrade::Remove-Unused-Dependencies "true";
-      Unattended-Upgrade::Automatic-Reboot "false";
-    mode: '0644'
