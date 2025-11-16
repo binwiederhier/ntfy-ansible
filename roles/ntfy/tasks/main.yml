@@ -8,14 +8,14 @@
     state: directory
     mode: 0755
 
-- name: Install archive.heckel.io repository keyring
+- name: Install archive.ntfy.sh repository keyring
   ansible.builtin.get_url:
-    url: https://archive.heckel.io/apt/keyring.gpg
-    dest: /etc/apt/keyrings/archive.heckel.io.gpg
+    url: https://archive.ntfy.sh/apt/keyring.gpg
+    dest: /etc/apt/keyrings/ntfy.gpg
 
 - name: Add archive.heckel.io repository
   apt_repository:
-    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/archive.heckel.io.gpg] https://archive.heckel.io/apt debian main"
+    repo: "deb [signed-by=/etc/apt/keyrings/ntfy.gpg] https://archive.ntfy.sh/apt stable main"
     state: present
     filename: ntfy
 
