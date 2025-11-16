@@ -13,9 +13,9 @@
     url: https://archive.ntfy.sh/apt/keyring.gpg
     dest: /etc/apt/keyrings/ntfy.gpg
 
-- name: Add archive.heckel.io repository
+- name: Add archive.ntfy.sh repository
   apt_repository:
-    repo: "deb [signed-by=/etc/apt/keyrings/ntfy.gpg] https://archive.ntfy.sh/apt stable main"
+    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/ntfy.gpg] https://archive.ntfy.sh/apt stable main"
     state: present
     filename: ntfy
 
