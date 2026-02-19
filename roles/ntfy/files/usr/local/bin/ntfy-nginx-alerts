@@ -1,0 +1,25 @@
+#!/bin/bash
+
+. /etc/custom/custom.conf
+
+error_log="/var/log/nginx/error.log"
+state_file="/tmp/ntfy-nginx-alert"
+
+last_alert=$(grep '\[alert\]' "$error_log" | tail -1)
+
+if [ -z "$last_alert" ]; then
+  exit 0
+fi
+
+if [ -f "$state_file" ] && [ "$(cat "$state_file")" = "$last_alert" ]; then
+  exit 0
+fi
+
+echo "$last_alert" > "$state_file"
+
+curl -s \
+  -H "Title: Nginx alert on $(hostname)" \
+  -H "Tags: warning,rotating_light" \
+  -H "Priority: high" \
+  -d "$last_alert" \
+  "${ntfy_topic_url}"

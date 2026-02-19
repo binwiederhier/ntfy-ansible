@@ -1,9 +1,11 @@
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
-# m   h  dom mon dow user command
-*/2   *  *   *   *   root /usr/local/bin/ntfy-health-check >> /var/log/ntfy-health-check.log
-58    23 *   *   *   root /usr/local/bin/ntfy-stats > /dev/null
-12,42 *  *   *   *   root /usr/local/bin/ntfy-database-backup > /dev/null 2>&1
-*/2   *  *   *   *   root /usr/local/bin/ntfy-emergency-restart
-*/2   *  *   *   *   root /usr/local/bin/ntfy-debug
-*/7   *  *   *   *   root /usr/local/bin/ntfy-checkdiskspace
+# m   h   dom mon dow user command
+*/2   *   *   *   *   root /usr/local/bin/ntfy-health-check >> /var/log/ntfy-health-check.log
+58    23  *   *   *   root /usr/local/bin/ntfy-stats > /dev/null
+12    */2 *   *   *   root /usr/local/bin/ntfy-database-backup > /dev/null 2>&1
+*/11  *   *   *   *   root /usr/local/bin/ntfy-database-truncate
+*/2   *   *   *   *   root /usr/local/bin/ntfy-emergency-restart
+*/2   *   *   *   *   root /usr/local/bin/ntfy-debug
+*/7   *   *   *   *   root /usr/local/bin/ntfy-checkdiskspace
+23    */2 *   *   *   root /usr/local/bin/ntfy-nginx-alerts

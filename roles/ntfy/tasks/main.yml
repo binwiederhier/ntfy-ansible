@@ -142,12 +142,14 @@
   loop:
     - ntfy-checkdiskspace
     - ntfy-database-backup
+    - ntfy-database-truncate
     - ntfy-health-check
     - ntfy-ssh-login
     - ntfy-stats
     - ntfy-setup
     - ntfy-debug
     - ntfy-emergency-restart
+    - ntfy-nginx-alerts
 
 - name: Install custom cronjobs /etc/cron.d/custom
   copy:

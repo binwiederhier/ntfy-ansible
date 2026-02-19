@@ -1,4 +1,33 @@
 #!/bin/bash
 
+. /etc/custom/custom.conf
+
+start=$(date +%s)
+
 sqlite3 /var/cache/ntfy/cache.db ".backup /var/cache/ntfy/cache.db-backup"
+rc1=$?
+
 sqlite3 /var/lib/ntfy/user.db ".backup /var/lib/ntfy/user.db-backup"
+rc2=$?
+
+sqlite3 /var/lib/ntfy/webpush.db ".backup /var/lib/ntfy/webpush.db-backup"
+rc3=$?
+
+duration=$(( $(date +%s) - start ))
+
+if [ $rc1 -ne 0 ] || [ $rc2 -ne 0 ] || [ $rc3 -ne 0 ]; then
+  curl -s \
+    -H "Title: Database backup FAILED on $(hostname)" \
+    -H "Tags: warning,rotating_light" \
+    -H "Priority: high" \
+    -d "Backup failed after ${duration}s (cache.db rc=$rc1, user.db rc=$rc2, webpush.db rc=$rc3)" \
+    "${ntfy_topic_url}"
+  exit 1
+fi
+
+curl -s \
+  -H "Title: Database backup successful on $(hostname)" \
+  -H "Tags: white_check_mark" \
+  -H "Priority: low" \
+  -d "Backup completed in ${duration}s" \
+  "${ntfy_topic_url}"
