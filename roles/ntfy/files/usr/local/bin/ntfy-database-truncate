@@ -12,7 +12,7 @@ cache_ok=false
 user_ok=false
 webpush_ok=false
 
-for i in $(seq 1 10); do
+for i in $(seq 1 50); do
   if ! $cache_ok; then
     check_truncate /var/cache/ntfy/cache.db && cache_ok=true
   fi
@@ -22,22 +22,13 @@ for i in $(seq 1 10); do
   if ! $webpush_ok; then
     check_truncate /var/lib/ntfy/webpush.db && webpush_ok=true
   fi
-
   if $cache_ok && $user_ok && $webpush_ok; then
     break
   fi
-
-  sleep 1
+  sleep 3
 done
 
-if $cache_ok && $user_ok && $webpush_ok; then
-  curl -s \
-    -H "Title: WAL truncate successful on $(hostname)" \
-    -H "Tags: white_check_mark" \
-    -H "Priority: low" \
-    -d "WAL checkpoint truncate completed (cache_ok=$cache_ok, user_ok=$user_ok, webpush_ok=$webpush_ok)" \
-    "${ntfy_topic_url}"
-else
+if ! $cache_ok || ! $user_ok || ! $webpush_ok; then
   curl -s \
     -H "Title: WAL truncate FAILED on $(hostname)" \
     -H "Tags: warning,rotating_light" \
