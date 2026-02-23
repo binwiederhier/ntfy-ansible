@@ -77,7 +77,6 @@ cache-startup-queries: |
   pragma synchronous = normal;
   pragma temp_store = memory;
   pragma busy_timeout = 15000;
-  vacuum;
 
 # If set, access to the ntfy server and API can be controlled on a granular level using
 # the 'ntfy user' and 'ntfy access' commands. See the --help pages for details, or check the docs.
@@ -288,13 +287,13 @@ global-topic-limit: 500000
 # visitor-request-limit-replenish: "5s"
 # visitor-request-limit-exempt-hosts: ""
 #
-# Exemptions (KEEP IN SYNC WITH nginx!):
+# Exemptions (KEEP IN SYNC WITH nginx, also see CRM.md):
 # - up.schildi.chat (116.203.112.46)
 # - matrix.gateway.unifiedpush.org (132.226.42.65, run by karmanyaahm)
 # - mastodon.social (136.243.88.169)
 # - matrix.org (176.126.240.0/24, seen 176.126.240.158, 176.126.240.157, 176.126.240.216)
 # - matrix.envs.net (188.40.204.226, run by ~creme)
-visitor-request-limit-exempt-hosts: "up.schildi.chat,matrix.gateway.unifiedpush.org,136.243.88.169,176.126.240.0/24,matrix.envs.net"
+visitor-request-limit-exempt-hosts: "up.schildi.chat,matrix.gateway.unifiedpush.org,136.243.88.169,176.126.240.0/24,matrix.envs.net,matrix.4d2.org"
 
 # Rate limiting: Hard daily limit of messages per visitor and day. The limit is reset
 # every day at midnight UTC. If the limit is not set (or set to zero), the request
