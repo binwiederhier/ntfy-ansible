@@ -141,8 +141,6 @@
     mode: 0700
   loop:
     - ntfy-checkdiskspace
-    - ntfy-database-backup
-    - ntfy-database-truncate
     - ntfy-health-check
     - ntfy-ssh-login
     - ntfy-stats
@@ -179,10 +177,17 @@
   apt:
     pkg:
       - ntfy
-      - sqlite3
       - jq
     state: present # Not: latest, we want to restart manually!
     update_cache: true
+
+- name: Install /etc/ntfy/db-ca-cert.pem
+  copy:
+    content: "{{ ntfy_database_ca_cert }}"
+    dest: /etc/ntfy/db-ca-cert.pem
+    owner: ntfy
+    group: ntfy
+    mode: 0600
 
 - name: Update /etc/ntfy/server.yml
   template:
