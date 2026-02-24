@@ -112,9 +112,5 @@ for topic in "${topics_cannot_reserve[@]}"; do
   ntfy access everyone "$topic" read-write
 done
 
-# Chown it (since we run these commands as root)
-chown ntfy:ntfy /var/lib/ntfy/user.db*
-chown ntfy:ntfy /var/cache/ntfy/cache.db*
-
 # Prevent setup from running again
 touch "$donefile"
