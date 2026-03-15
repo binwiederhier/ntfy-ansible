@@ -61,6 +61,12 @@ firebase-key-file: "/etc/ntfy/firebase.json"
 #   database-url: "postgres://user:pass@host:5432/ntfy?sslmode=require&pool_max_conns=50"
 #
 database-url: "{{ ntfy_database_url }}"
+{% if ntfy_database_replica_urls is defined and ntfy_database_replica_urls %}
+database-replica-urls:
+{% for url in ntfy_database_replica_urls %}
+  - "{{ url }}"
+{% endfor %}
+{% endif %}
 
 # If "cache-file" is set, messages are cached in a local SQLite database instead of only in-memory.
 # This allows for service restarts without losing messages in support of the since= parameter.

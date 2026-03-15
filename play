@@ -8,4 +8,13 @@ fi
 
 export env="$1"
 export playbook="${2:-ntfy}"
+
+if [ "$env" = "prod" ]; then
+	read -p "You are about to deploy to PRODUCTION. Are you sure? (y/N) " confirm
+	if [ "$confirm" != "y" ]; then
+		echo "Aborted."
+		exit 1
+	fi
+fi
+
 ansible-playbook -i "inventory/$env.yml" -e "@secrets/$env.yml" "playbooks/$playbook.yml"
