@@ -17,4 +17,6 @@
       - htop
       - vim
       - unattended-upgrades
+      - postgresql-client-common
+      - postgresql-client-14
     state: present

@@ -7,3 +7,4 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 */2   *   *   *   *   root /usr/local/bin/ntfy-debug
 */7   *   *   *   *   root /usr/local/bin/ntfy-checkdiskspace
 23    */2 *   *   *   root /usr/local/bin/ntfy-nginx-alerts
+23    */2 *   *   *   root /usr/local/bin/ntfy-log-alerts

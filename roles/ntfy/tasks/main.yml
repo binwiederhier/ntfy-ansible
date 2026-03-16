@@ -148,6 +148,7 @@
     - ntfy-debug
     - ntfy-emergency-restart
     - ntfy-nginx-alerts
+    - ntfy-log-alerts
 
 - name: Install custom cronjobs /etc/cron.d/custom
   copy:
@@ -240,13 +241,6 @@
   command:
     cmd: certbot certonly --dns-route53 -d {{ ntfy_domain }} --agree-tos -m ntfy@heckel.io -n
     creates: /etc/letsencrypt/live/{{ ntfy_domain }}
-
-- name: Enable and start ntfy
-  systemd:
-    daemon-reload: yes
-    name: ntfy
-    state: started
-    enabled: yes
 
 - name: Enable and start ntfy
   systemd:

@@ -1,0 +1,27 @@
+#!/bin/bash
+
+. /etc/custom/custom.conf
+
+error_log="/var/log/ntfy.log"
+state_file="/tmp/ntfy-log-alert"
+
+last_error=$(grep '"level":"ERROR"' "$error_log" | tail -1)
+
+if [ -z "$last_error" ]; then
+  exit 0
+fi
+
+if [ -f "$state_file" ] && [ "$(cat "$state_file")" = "$last_error" ]; then
+  exit 0
+fi
+
+echo "$last_error" > "$state_file"
+
+last_message=$(echo "$last_error" | jq -r .message)
+
+curl -s \
+  -H "Title: ntfy error on $(hostname)" \
+  -H "Tags: warning,rotating_light" \
+  -H "Priority: high" \
+  -d "$last_message" \
+  "${ntfy_topic_url}"
