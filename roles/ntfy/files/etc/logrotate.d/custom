@@ -5,6 +5,13 @@
     missingok
 }
 
+/var/log/ntfy-database-backup.log {
+    rotate 12
+    weekly
+    compress
+    missingok
+}
+
 /var/log/ntfy-goroutine.log {
     rotate 90
     daily

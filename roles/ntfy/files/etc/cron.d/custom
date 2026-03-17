@@ -8,3 +8,4 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 */7   *   *   *   *   root /usr/local/bin/ntfy-checkdiskspace
 23    */2 *   *   *   root /usr/local/bin/ntfy-nginx-alerts
 23    */2 *   *   *   root /usr/local/bin/ntfy-log-alerts
+17    *   *   *   *   root /usr/local/bin/ntfy-database-backup >> /var/log/ntfy-database-backup.log 2>&1

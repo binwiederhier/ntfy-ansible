@@ -1,0 +1,91 @@
+#!/bin/bash
+set -euo pipefail
+
+. /etc/custom/custom.conf
+
+# Check disk space before backup (require at least 10G free on /backups)
+available_gb=$(df --output=avail -BG /backups | tail -1 | tr -d ' G')
+if [ "$available_gb" -lt 10 ]; then
+  echo "$(date): Insufficient disk space: ${available_gb}G available, 10G required"
+  curl \
+    -d "Database backup aborted: only ${available_gb}G free on /backups (10G required)" \
+    -H "Title: Database backup FAILED on $(hostname)" \
+    -H "Priority: high" \
+    -H "Tags: warning,rotating_light" \
+    "${ntfy_topic_url}"
+  exit 1
+fi
+
+date_dir="/backups/db/$(date +%y%m%d)"
+backup_dir="$date_dir/$(date +%y%m%d%H%M%S)"
+backup_log="$backup_dir/pg_dump.log"
+start_time=$(date +%s)
+
+cleanup() {
+  local exit_code=$?
+  if [ $exit_code -ne 0 ]; then
+    local error_details=""
+    if [ -f "$backup_log" ]; then
+      error_details=$(tail -5 "$backup_log")
+    fi
+    echo "$(date): Backup FAILED (exit code $exit_code): $error_details" | tee -a "$backup_log"
+    curl \
+      -d "Database backup failed (exit code $exit_code): $error_details" \
+      -H "Title: Database backup FAILED on $(hostname)" \
+      -H "Priority: high" \
+      -H "Tags: warning,rotating_light" \
+      "${ntfy_topic_url}"
+  fi
+}
+trap cleanup EXIT
+
+mkdir -p "$backup_dir"
+
+echo "$(date): Starting database backup to $backup_dir ..." | tee -a "$backup_log"
+
+export PGPASSWORD="$ntfy_backup_db_pass"
+export PGSSLMODE=require
+export PGSSLROOTCERT=/etc/ntfy/db-ca-cert.pem
+pg_dump \
+  -h "$ntfy_backup_db_host" \
+  -p "$ntfy_backup_db_port" \
+  -U "$ntfy_backup_db_user" \
+  -d "$ntfy_backup_db_name" \
+  -Fc \
+  -v \
+  -f "$backup_dir/ntfy.dump" \
+  &>>"$backup_log"
+
+echo "$(date): pg_dump completed, verifying backup ..." | tee -a "$backup_log"
+
+pg_restore -f /dev/null "$backup_dir/ntfy.dump" >> "$backup_log"
+
+echo "$(date): Backup verified, cleaning up old backups ..." | tee -a "$backup_log"
+
+# Retention: for day dirs older than 1 day, keep only the latest backup
+for day_dir in /backups/db/*/; do
+  [ -d "$day_dir" ] || continue
+  if [ "$(find "$day_dir" -maxdepth 0 -mtime +7 -print)" ]; then
+    echo "$(date): Removing old backup directory $day_dir (older than 7 days)" | tee -a "$backup_log"
+    rm -rf "$day_dir"
+  elif [ "$(find "$day_dir" -maxdepth 0 -mtime +1 -print)" ]; then
+    # Keep only the last backup (highest timestamp = latest)
+    to_remove=$(ls -d "$day_dir"*/ | head -n -1)
+    if [ -n "$to_remove" ]; then
+      echo "$(date): Rolling up $day_dir, keeping latest, removing $(echo "$to_remove" | wc -l) older backups" | tee -a "$backup_log"
+      echo "$to_remove" | xargs -r rm -rf
+    fi
+  fi
+done
+
+end_time=$(date +%s)
+duration=$((end_time - start_time))
+size=$(du -sh "$backup_dir/ntfy.dump" | cut -f1)
+
+curl \
+  -d "Database backup completed in ${duration}s. Size: ${size}. Path: ${backup_dir}" \
+  -H "Title: Database backup OK on $(hostname)" \
+  -H "Tags: white_check_mark" \
+  "${ntfy_topic_url}"
+
+echo "$(date): Backup completed successfully to $backup_dir (${size}, ${duration}s)" | tee -a "$backup_log"

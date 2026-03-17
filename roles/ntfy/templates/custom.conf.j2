@@ -22,3 +22,11 @@ ntfy_twilio_account="{{ ntfy_twilio_account }}"
 ntfy_twilio_auth_token="{{ ntfy_twilio_auth_token }}"
 ntfy_twilio_phone_number="{{ ntfy_twilio_phone_number }}"
 ntfy_twilio_verify_service="{{ ntfy_twilio_verify_service }}"
+
+{% if ntfy_database_replica_urls is defined and ntfy_database_replica_urls | length > 0 %}
+ntfy_backup_db_host="{{ ntfy_database_replica_urls[0] | urlsplit('hostname') }}"
+ntfy_backup_db_port="{{ ntfy_database_replica_urls[0] | urlsplit('port') }}"
+ntfy_backup_db_user="{{ ntfy_database_replica_urls[0] | urlsplit('username') }}"
+ntfy_backup_db_pass="{{ ntfy_database_replica_urls[0] | urlsplit('password') }}"
+ntfy_backup_db_name="{{ ntfy_database_replica_urls[0] | urlsplit('path') | regex_replace('^/', '') }}"
+{% endif %}
